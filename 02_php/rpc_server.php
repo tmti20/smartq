@@ -24,8 +24,12 @@ echo " [x] Awaiting RPC requests\n";
 $callback = function ($req) {
     $n = intval($req->body);
     echo ' [.] fib(', $n, ")\n";
-// This is where we return the value
-    $msg = new AMQPMessage("Message",array('correlation_id' => $req->get('correlation_id')));
+
+    $msg = new AMQPMessage(
+        (string) fib($n),
+        array('correlation_id' => $req->get('correlation_id'))
+    );
+
     $req->delivery_info['channel']->basic_publish(
         $msg,
         '',
@@ -42,6 +46,7 @@ $channel->basic_consume('rpc_queue', '', false, false, false, false, $callback);
 while ($channel->is_consuming()) {
     $channel->wait();
 }
+
 $channel->close();
 $connection->close();
 ?>

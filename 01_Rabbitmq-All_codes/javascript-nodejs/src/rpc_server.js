@@ -29,7 +29,7 @@ amqp.connect('amqp://localhost', function(error0, connection) {
                     correlationId: msg.properties.correlationId
                 });
 
-            channel.ack(msg);
+            channel.ack("Hello");
         });
     });
 });

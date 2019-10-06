@@ -8,7 +8,6 @@ if (args.length === 0) {
     console.log("Usage: rpc_client.js num");
     process.exit(1);
 }
-
 amqp.connect('amqp://localhost', function(error0, connection) {
     if (error0) {
         throw error0;
@@ -30,7 +29,7 @@ amqp.connect('amqp://localhost', function(error0, connection) {
 
             channel.consume(q.queue, function(msg) {
                 if (msg.properties.correlationId === correlationId) {
-                    console.log(' [.] Got %s', msg.content.toString());
+                    console.log(' [.] Got %s', msg.content);
                     setTimeout(function() {
                         connection.close();
                         process.exit(0);
