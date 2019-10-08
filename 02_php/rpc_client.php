@@ -1,9 +1,7 @@
 <?php
-
 require_once __DIR__ . '/vendor/autoload.php';
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
-
 class FibonacciRpcClient
 {
     private $connection;
@@ -11,7 +9,6 @@ class FibonacciRpcClient
     private $callback_queue;
     private $response;
     private $corr_id;
-
     public function __construct()
     {
         $this->connection = new AMQPStreamConnection(
@@ -41,24 +38,22 @@ class FibonacciRpcClient
             )
         );
     }
-
     public function onResponse($rep)
     {
         if ($rep->get('correlation_id') == $this->corr_id) {
             $this->response = $rep->body;
         }
     }
-
     public function call($n)
     {
         $this->response = null;
         $this->corr_id = uniqid();
-
         $msg = new AMQPMessage(
             (string) $n,
             array(
                 'correlation_id' => $this->corr_id,
-                'reply_to' => $this->callback_queue
+                'reply_to' => $this->callback_queue,
+                'content_type'=> 'application/json'
             )
         );
         $this->channel->basic_publish($msg, '', 'rpc_queue');
@@ -68,8 +63,7 @@ class FibonacciRpcClient
         return intval($this->response);
     }
 }
-
 $fibonacci_rpc = new FibonacciRpcClient();
-$response = $fibonacci_rpc->call(30);
+$response = $fibonacci_rpc->call("ab");
 echo ' [.] Got ', $response, "\n";
 ?>
