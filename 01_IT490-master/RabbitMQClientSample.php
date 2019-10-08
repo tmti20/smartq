@@ -4,19 +4,13 @@ require_once('get_host_info.inc');
 require_once('rabbitMQLib.inc');
 
 $client = new RabbitMQClient('testRabbitMQ.ini', 'testServer');
-if(isset($argv[1])){
-	$msg = $argv[1];
-}
-else{
-	$msg = array("message"=>"test message", "type"=>"echo");
-}
-echo  "Client sending request: <pre>" . var_export($msg, true) . "</pre>\n<br>";
-$response = $client->send_request($msg);
-
-echo "client received response: " . PHP_EOL;
-
-echo "<pre>".var_export($response, true) ."</pre";//pre for browser
-echo "\n\n";
-
-if(isset($argv[0]))
-echo $argv[0] . " END".PHP_EOL;
+$type="login";
+$username="mamun";
+$pass="";
+$req = array("username"=>$username, "type"=>$type,"pass"=>$password);
+//echo  "Client sending request......\n";
+$response = $client->send_request($req);
+//convert std class to array
+$arr=get_object_vars($response);
+echo $arr["message"]."\n";
+?>

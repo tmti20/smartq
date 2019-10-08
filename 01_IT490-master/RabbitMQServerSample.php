@@ -1,25 +1,23 @@
 <?php
-
 require_once('path.inc');
 require_once('get_host_info.inc');
 require_once('rabbitMQLib.inc');
 
 function login($user,$pass){
-	//TODO validate user credentials
-	return true;
-}
-function doEcho($req){
-	$req['message'] = "Echo " . $req['message'];
-	return $req;
+	$res=array();
+	if($user=="mamun"){
+		$res["message"]="succes";
+		$res["message2"]="succes";
+	}
+	else{
+		$res["message"]="Failed";
+	}
+	return $res;	
 }
 function request_processor($req){
-	echo "Received Request".PHP_EOL;
-	echo "Request[" . $req . "]\n<br>"; 
-	echo "<pre>" . var_export($req, true) . "</pre>";
 	if(!isset($req['type'])){
 		return __FILE__ . ".Error: unsupported message type";
 	}
-	//Handle message type
 	$type = $req['type'];
 	switch($type){
 		case "login":
@@ -29,8 +27,8 @@ function request_processor($req){
 		case "echo":
 			return doEcho($req);
 	}
-	return array("return_code" => '0',
-		"message" => "Server received request and processed it");
+	// This is what is returned
+	return array("message" => "Default");
 }
 
 $server = new rabbitMQServer("testRabbitMQ.ini", "sampleServer");
