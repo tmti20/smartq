@@ -6,7 +6,7 @@ require_once('rabbitMQLib.inc');
 //$connection=new mysqli("localhost", "aj", "aj123", "rabbitMQ");
 function udoLogin($email,$password)
 {
-$connection=new mysqli("192.168.1.123", "myuser", "mypass", "test");
+$connection=new mysqli("172.23.249.138", "myuser", "mypass", "test");
 $query = "select * from users where email='$email' and userpass='$password' ";
 $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
 $count = mysqli_num_rows($result);
@@ -24,7 +24,7 @@ return 0 ;
 }
 function cdoLogin($email,$password)
 {
-$connection=new mysqli("192.168.1.123", "myuser", "mypass", "test");
+$connection=new mysqli("172.23.249.138", "myuser", "mypass", "test");
 $query = "select * from business where email='$email' and password='$password' ";
 $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
 $count = mysqli_num_rows($result);
@@ -44,7 +44,7 @@ return 0 ;
 //register Marchant
 function cdoRegister($location,$storename,$email,$category,$lat,$longit,$password)
 { 
-$connection=new mysqli("192.168.1.123", "myuser", "mypass", "test");
+$connection=new mysqli("172.23.249.138", "myuser", "mypass", "test");
 //$query = "INSERT INTO `business` VALUES ('locaiton','$storename','email','category','lat','longit','password',now())";
 // create table business( marchantid int NOT NULL AUTO_INCREMENT, location varchar(255), storename varchar(255), email varchar(255), category varchar(255), lat varchar(255), longit varchar(255), password varchar(255), timestamp varchar(255),PRIMARY KEY(marchantid));
 $query = "INSERT INTO business(location,storename,email,category,lat,longit,password,timestamp) VALUES ('$location','$storename','$email','$category','$lat','$longit','$password',now())";
@@ -57,7 +57,7 @@ else {
 //registers users
 function udoRegister($location,$email,$lat,$longit,$password)
 { 
-$connection=new mysqli("192.168.1.123", "myuser", "mypass", "test");
+$connection=new mysqli("172.23.249.138", "myuser", "mypass", "test");
 //$query = "INSERT INTO `business` VALUES ('locaiton','$storename','email','category','lat','longit','password',now())";
 //udoRegister($request['location'],$request['email'],$request['lat'],$request['longit'],$request['password']);
 //create table users( userid int NOT NULL AUTO_INCREMENT,email varchar(255), userpass varchar(255), location varchar(255),lat varchar(255),longit varchar(255),PRIMARY KEY(userid));
@@ -70,7 +70,7 @@ else {
 }
 // Add queue by client
 function AddQueclient($queueid,$queueduration){
-  $connection=new mysqli("192.168.1.123", "myuser", "mypass", "test"); 
+  $connection=new mysqli("172.23.249.138", "myuser", "mypass", "test"); 
   $query = "INSERT INTO queue(queueid, queueduration, queuetime) VALUES ($queueid,$queueduration,now())";
   $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
   if ($result){ return 1 ; }
@@ -80,7 +80,7 @@ function AddQueclient($queueid,$queueduration){
   }
 // Remove queue by client
 function removeQueclient($queueid){
-  $connection=new mysqli("192.168.1.123", "myuser", "mypass", "test"); 
+  $connection=new mysqli("172.23.249.138", "myuser", "mypass", "test"); 
   $query = "DELETE FROM queue WHERE queueid = $queueid";
   $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
   if ($result){ return 1 ; }
