@@ -19,7 +19,4 @@ $response = $client->send_request($req);
 if($response==1){
  echo "Your login is succesfull \n\n";
 }
-else{
-echo "Login Failed \n\n";
-}
 ?>
