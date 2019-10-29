@@ -6,9 +6,9 @@ require_once('rabbitMQLib.inc');
 //$connection=new mysqli("localhost", "aj", "aj123", "rabbitMQ");
 function doLogin($username,$password)
 {
-$connection=new mysqli("192.168.1.114", "root", "Ma@142566", "mydb");
+$connection=new mysqli("192.168.1.123", "myuser", "mypass", "test");
 
-$query = "select * from users where ucid='$username' ";
+$query = "select * from users where username='$username' and userpass='$password' ";
 
 $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
 $count = mysqli_num_rows($result);
@@ -22,40 +22,18 @@ return 0 ;
 }
 
 //registers users
-function doRegister($username,$password,$email)
-{
-$connection=new mysqli("192.168.1.7", "karm", "karm123", "rabbitMQ");
-
-$query1 = "SELECT * FROM `Users` WHERE username='$username' OR password='$email'";
-
-$result1 = mysqli_query($connection, $query1) or die(mysqli_error($connection));
-$count1 = mysqli_num_rows($result1);
-//3.1.2 If the posted values are equal to the database values, then session will be created for the user.
-if ($count1 >= 1){
-return 0 ;
+function doRegister($location,$storename,$email,$category,$lat,$longit,$password)
+{ 
+$connection=new mysqli("192.168.1.123", "myuser", "mypass", "test");
+//$query = "INSERT INTO `business` VALUES ('locaiton','$storename','email','category','lat','longit','password',now())";
+$query = "INSERT INTO `business` VALUES ('$location','$storename','$email','$category','$lat','$longit','$password',now())";
+$result = mysqli_query($connection, $query) or die(mysqli_error($connection));
+if ($result){ return 1 ; }
+else { 
+  return 0 ;
 }
-else{
-//3.1.3 If the login credentials doesn't match, he will be shown with an error message.
-
-$query = "INSERT INTO Users (username, email, password)  VALUES ('$username', '$email', '$password')";
-
- $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
-
-//3.1.2 If the posted values are equal to the database values, then session will be created for the user.
-if ($result){
-
-return 1 ;
-
-}else{
-//3.1.3 If the login credentials doesn't match, he will be shown with an error message.
-
-return 0 ;
-
 }
 
-}
-
-}
 
 function requestProcessor($request)
 {
@@ -71,9 +49,8 @@ function requestProcessor($request)
       return doLogin($request['username'],$request['password']);
     case "validate_session":
       return doValidate($request['sessionId']);
-    case "register":
-      return doRegister($request['username'],$request['password'],$request['email']);
-
+    case "registration":
+      return doRegister($request['location'],$request['storename'],$request['email'],$request['category'],$request['lat'],$request['longit'],$request['password']);
   }
   return array("returnCode" => '0', 'message'=>"Server received request and processed");
 }
