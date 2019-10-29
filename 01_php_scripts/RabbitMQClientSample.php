@@ -8,7 +8,7 @@ $client = new RabbitMQClient('testRabbitMQ.ini', 'testServer');
 //$username="azi3";
 //$pass="1234";
 $type=$_GET["type"];
-if($type=="registration"){
+if($type=="cregistration"){
     $location=$_GET['address'];
     $storename=$_GET['storename'];
     $email=$_GET['email'];
@@ -28,19 +28,113 @@ if($type=="registration"){
     echo "registration is Failed \n\n";
     }    
 }
-else if($type=="login"){
-    $username=$_POST["username"];
-    $pass=$_POST["password"];
-    $req = array("username"=>$username, "type"=>$type,"password"=>$pass);
+else if($type=="uregistration"){
+    $location=$_GET['address'];
+    $email=$_GET['email'];
+    $lat=$_GET['lat'];
+    $longit=$_GET['longit'];
+    $pass=$_GET['password'];
+    $type=$_GET['type'];
+    $req = array("type"=>$type,"location"=>$location,"email"=>$email,"lat"=>$lat,"longit"=>$longit,"password"=>$pass);
     $response = $client->send_request($req);
     //convert std class to array
     //print_r($response);
     if($response==1){
-     echo "Your login is succesfull \n\n";
+     echo "Your registration is succesfull \n\n";
+    }
+    else{
+    echo "registration is Failed \n\n";
+    }    
+}
+else if($type=="uLogin"){
+    $email=$_GET["email"];
+    $pass=$_GET["password"];
+    $type=$_GET["type"];
+    $req = array("type"=>$type,"email"=>$email, "type"=>$type,"password"=>$pass);
+    $response = $client->send_request($req);
+    //convert std class to array
+    //print_r($response);
+    if($response==1){
+        echo '
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+           <div class="collapse navbar-collapse" id="navbarNav">
+             <ul class="navbar-nav">
+               <li class="nav-item active">
+                 <a class="nav-link" href="./01_userLoggedIn/userLoggedIn.php">Enter</a>
+               </li>
+             </ul>
+           </div>
+         </nav>		
+           ';
     }
     else{
     echo "Login Failed \n\n";
     }
 }
+else if($type=="cLogin"){
+    $email=$_GET["email"];
+    $pass=$_GET["password"];
+    $type=$_GET["type"];
+    $req = array("type"=>$type,"email"=>$email, "type"=>$type,"password"=>$pass);
+    $response = $client->send_request($req);
+    //convert std class to array
+    //print_r($response);
+    if($response==1){
+     echo '
+     <nav class="navbar navbar-expand-lg navbar-light bg-light">
+		<div class="collapse navbar-collapse" id="navbarNav">
+		  <ul class="navbar-nav">
+			<li class="nav-item active">
+			  <a class="nav-link" href="./02_client_loggedIn/clientLoggedIn.php">Enter</span></a>
+			</li>
+		  </ul>
+		</div>
+	  </nav>		
+        ';
+        //echo "Your login is succesfull \n\n";
+     //header("Location: http://localhost/it-490/01_php_scripts/02_client_loggedIn/clientLoggedIn.php");
+    }
+    else{
+    echo "Login Failed \n\n";
+    }
+}
+else if($type=="Qadd_client"){
+  $queueid=$_GET["queueid"];
+  $queueduration=$_GET["queueduration"];
+  $type=$_GET["type"];
+  $req = array("type"=>$type,"queueid"=>$queueid, "type"=>$type,"queueduration"=>$queueduration);
+  $response = $client->send_request($req);
+  //convert std class to array
+  //print_r($response);
+  if($response==1){
+   echo '
+   <p>Added to the queue</p>
+      ';
+      //echo "Your login is succesfull \n\n";
+   //header("Location: http://localhost/it-490/01_php_scripts/02_client_loggedIn/clientLoggedIn.php");
+  }
+  else{
+  echo "Failed \n\n";
+  }
+}
+else if($type=="Qremove_client"){
+  $queueid=$_GET["queueid"];
+  $type=$_GET["type"];
+  $req = array("type"=>$type,"queueid"=>$queueid, "type"=>$type);
+  $response = $client->send_request($req);
+  //convert std class to array
+  //print_r($response);
+  if($response==1){
+   echo '
+   <p>Removed from the queue</p>
+      ';
+      //echo "Your login is succesfull \n\n";
+   //header("Location: http://localhost/it-490/01_php_scripts/02_client_loggedIn/clientLoggedIn.php");
+  }
+  else{
+  echo "Failed \n\n";
+  }
+}
+
 
 ?>
