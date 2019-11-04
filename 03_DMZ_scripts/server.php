@@ -4,57 +4,23 @@ require_once('path.inc');
 require_once('get_host_info.inc');
 require_once('rabbitMQLib.inc');
 $connection=new mysqli($hostname, $username, $mypassword, $database);
-
-function mysort($email){
-  $connection=new mysqli("192.168.1.123", "myuser", "mypass", "test");
-  $query = "select * from queue";
-  $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
-  while($row = $result->fetch_array())
-  {$rows[] = $row;}
-  return $rows;
-  //print_r($rows);
-}
-
-function udoLogin($email,$password)
-{
+function write_to_text($filename,$txt){
+  $myfile = fopen($filename, "a") or die("Unable to open file!");
+  fwrite($myfile, $txt);
+  fclose($myfile); 
+  }  
+function testRegister($type,$name)
+{ 
+//$query = "INSERT INTO `business` VALUES ('locaiton','$storename','email','category','lat','longit','password',now())";
+// create table business( marchantid int NOT NULL AUTO_INCREMENT, location varchar(255), storename varchar(255), email varchar(255), category varchar(255), lat varchar(255), longit varchar(255), password varchar(255), timestamp varchar(255),PRIMARY KEY(marchantid));
 $connection=new mysqli("192.168.1.123", "myuser", "mypass", "test");
-$query = "select * from users where email='$email' and userpass='$password' ";
+$query = "INSERT INTO test(name) values('$name')";
 $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
-$count = mysqli_num_rows($result);
-if ($count >= 1){
-  $errorMsg="user with email id: ".$email." has logged in";
-  $query = "INSERT INTO `error`(errornumber, errormessage, errortime) VALUES ('101','$errorMsg', NOW());";
-  $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
-return 1 ;
-}else{
-  $errorMsg="user with email id: ".$email." login failed";
-  $query = "INSERT INTO `error`(errornumber, errormessage, errortime) VALUES ('101','$errorMsg', NOW());";
-  $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
-return 0 ;
+if ($result){ return 1 ; }
+else { 
+  return 0 ;
 }
 }
-
-//--------------client Login
-function cdoLogin($email,$password)
-{
-$connection=new mysqli("192.168.1.123", "myuser", "mypass", "test");
-$query = "select * from business where email='$email' and password='$password' ";
-$result = mysqli_query($connection, $query) or die(mysqli_error($connection));
-$count = mysqli_num_rows($result);
-if ($count >= 1){
-  $errorMsg="client with email id: ".$email." has logged in";
-  $query = "INSERT INTO `error`(errornumber, errormessage, errortime) VALUES ('101','$errorMsg', NOW());";
-  $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
-  return 1 ;
-
-}else{
-  $errorMsg="client with email id: ".$email." login failed";
-  $query = "INSERT INTO `error`(errornumber, errormessage, errortime) VALUES ('101','$errorMsg', NOW());";
-  $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
-return 0 ;
-}
-}
-//register Marchant
 function cdoRegister($location,$storename,$email,$category,$lat,$longit,$password)
 { 
 //$query = "INSERT INTO `business` VALUES ('locaiton','$storename','email','category','lat','longit','password',now())";
@@ -68,12 +34,22 @@ else {
 }
 }
 //registers users
-function udoRegister($location,$email,$lat,$longit,$password)
-{ 
-//$query = "INSERT INTO `business` VALUES ('locaiton','$storename','email','category','lat','longit','password',now())";
-//udoRegister($request['location'],$request['email'],$request['lat'],$request['longit'],$request['password']);
-//create table users( userid int NOT NULL AUTO_INCREMENT,email varchar(255), userpass varchar(255), location varchar(255),lat varchar(255),longit varchar(255),PRIMARY KEY(userid));
-$connection=new mysqli("192.168.1.123", "myuser", $password, $database); 
+function udoRegister($location,$email,$password)
+{
+$lat=0;
+$longit=0;
+  $address= '35 manor drive,newark,new jersey,07106';
+  $apiKey = 'AIzaSyAtu4HVGNms2cRNWidF0-aYE1g34j1aPGQ'; // Google maps now requires an API key.
+  // Get JSON results from this request
+  $geo = file_get_contents('https://maps.googleapis.com/maps/api/geocode/json?address='.urlencode($location).'&sensor=false&key='.$apiKey);
+  //echo $geo;
+  $geo = json_decode($geo, true); // Convert the JSON to an array
+  if (isset($geo['status']) && ($geo['status'] == 'OK')) {
+    $lat = $geo['results'][0]['geometry']['location']['lat']; // Latitude
+    $longit = $geo['results'][0]['geometry']['location']['lng']; // Longitude
+    write_to_text("newfile.txt","Request processed : "."latitude is: ".$lat." Longgitute is: ".$longit." Time is: ".date("Y-m-d H:i:s",time())."\n");
+  }
+$connection=new mysqli("192.168.1.123", "myuser", "mypass", "test"); 
 $query = "INSERT INTO users(location,email,lat,longit,userpass) VALUES ('$location','$email','$lat','$longit','$password')";
 $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
 if ($result){ return 1 ; }
@@ -81,26 +57,6 @@ else {
   return 0 ;
 }
 }
-// Add queue by client
-function AddQueclient($queueid,$queueduration){
-  $connection=new mysqli("192.168.1.123", "myuser", $password, $database); 
-  $query = "INSERT INTO queue(queueid, queueduration, queuetime) VALUES ($queueid,$queueduration,now())";
-  $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
-  if ($result){ return 1 ; }
-  else { 
-  return 0 ;
-  }
-  }
-// Remove queue by client
-function removeQueclient($queueid){
-  $connection=new mysqli("192.168.1.123", "myuser", $password, $database); 
-  $query = "DELETE FROM queue WHERE queueid = $queueid";
-  $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
-  if ($result){ return 1 ; }
-  else { 
-  return 0;
-  }
-  }
 function requestProcessor($request)
 {
   echo "received request".PHP_EOL;
@@ -111,22 +67,12 @@ function requestProcessor($request)
   }
   switch ($request['type'])
   {
-    case "Qremove_client":
-    return removeQueclient($request['queueid']);
-    case "Qadd_client":
-    return AddQueclient($request['queueid'],$request['queueduration']);
-    case "Login":
-      return udoLogin($request['email'],$request['password']);
-    case "cLogin":
-    return cdoLogin($request['email'],$request['password']);
-    case "validate_session":
-      return doValidate($request['sessionId']);
+    case "reg":
+      return testRegister($request['type'],$request['name']);
     case "cregistration":
       return cdoRegister($request['location'],$request['storename'],$request['email'],$request['category'],$request['lat'],$request['longit'],$request['password']);
-      case "uregistration":
-      return udoRegister($request['location'],$request['email'],$request['lat'],$request['longit'],$request['password']);
-      case "sort":
-      return mysort($request['email']);
+      case "Registration":
+      return udoRegister($request['location'],$request['email'],$request['password']);
     }
   return array("returnCode" => '0', 'message'=>"Server received request and processed");
 }
