@@ -1,0 +1,4 @@
+Request processed : latitude is: 40.7366266 Longgitute is: -74.2475873 Time is: 2019-11-02 16:29:02
+Request processed : latitude is: 40.7366266 Longgitute is: -74.2475873 Time is: 2019-11-02 16:31:57
+Request processed : latitude is: 40.7366266 Longgitute is: -74.2475873 Time is: 2019-11-02 16:31:59
+Request processed : latitude is: 40.7366266 Longgitute is: -74.2475873 Time is: 2019-11-02 16:36:34
