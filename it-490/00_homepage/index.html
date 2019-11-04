@@ -85,6 +85,21 @@ function login(e){
   document.getElementById(cityName).style.display = "block";
   evt.currentTarget.className += " active";
 }
+function handleclick(e){
+	if(e.value=='Ulogin'){
+	var uemail=document.getElementById("uemail").value;
+	var upassword=document.getElementById("upassword").value;
+	event.preventDefault()
+	console.log(e.value,uemail,upassword)
+	}
+	else if(e.value=='Clogin'){
+	var uemail=document.getElementById("uemail").value;
+	var upassword=document.getElementById("upassword").value;
+	event.preventDefault()
+	console.log(e.value,uemail,upassword)
+	}
+
+}
 </script>
 </head>
 <body>
@@ -114,7 +129,7 @@ function login(e){
 		  </ul>
 		</div>
 	  </nav>		
-<!----------- member login starts here       -->
+<!----------- user login starts here       -->
 <div id="login" class="tabcontent">
 	<div class="container-login100 member">
 		<div class="container-login100">
@@ -123,13 +138,12 @@ function login(e){
 						<img src="images/img-01.png" alt="IMG">
 					</div>
 	
-					<form class="login100-form validate-form" action="../01_php_scripts/RabbitMQClientSample.php">
+					<form class="login100-form validate-form">
 						<span class="login100-form-title">
 							User Login
 						</span>
-	
 						<div class="wrap-input100">
-							<input class="input100" type="text" name="email" placeholder="Email">
+							<input id="uemail" class="input100" type="text" name="email" placeholder="Email">
 							<span class="focus-input100"></span>
 							<span class="symbol-input100">
 								<i class="fa fa-envelope" aria-hidden="true"></i>
@@ -137,14 +151,14 @@ function login(e){
 						</div>
 	
 						<div class="wrap-input100 validate-input" data-validate = "Password is required">
-							<input class="input100" type="password" name="password" placeholder="Password">
+							<input id="upassword" class="input100" type="password" name="password" placeholder="Password">
 							<span class="focus-input100"></span>
 							<span class="symbol-input100">
 								<i class="fa fa-lock" aria-hidden="true"></i>
 							</span>
 						</div>
 						<div class="container-login100-form-btn">
-							<input type="submit" class="login100-form-btn" name="type" value="Login">
+							<input type="button" onclick="handleclick(this)" class="login100-form-btn" name="type" value="Ulogin">
 						</input>
 						</div>
 					</form>
@@ -152,7 +166,7 @@ function login(e){
 			</div>	
 </div>
 </div>
-<!----------- user reg login starts here       -->
+<!----------- user reg starts here       -->
 
 <div id="user_reg" class="tabcontent">
 		<div class="container-login100 member">
