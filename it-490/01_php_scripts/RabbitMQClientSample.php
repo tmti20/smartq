@@ -7,8 +7,26 @@ $client = new RabbitMQClient('testRabbitMQ.ini', 'testServer');
 //$username="azi3";
 //$pass="1234";
 $type=$_GET["type"];
-$type2="sort";
-if($type=="cregistration"){
+$type2="sort1";
+$type3="reg1";
+if($type2=="sort"){
+  $email="azi3@njit.edu";
+  $req = array("type"=>"sort","email"=>$email);
+  $response = $client->send_request($req);
+  //convert std class to array
+  $array = json_decode(json_encode($response), True);
+  echo json_encode($array);
+  //print_r($array);  
+}
+else if($type3=="reg"){
+  $name="mamun";
+  $req = array("type"=>"reg","name"=>$name);
+  $response = $client->send_request($req);
+  //convert std class to array
+  echo $response;
+  //print_r($array);  
+}
+else if($type=="cregistration"){
     $location=$_GET['address'];
     $storename=$_GET['storename'];
     $email=$_GET['email'];
@@ -28,21 +46,9 @@ if($type=="cregistration"){
     echo "registration is Failed \n\n";
     }    
 }
-else if($type2=="sort"){
-  $email="azi3@njit.edu";
-  $req = array("type"=>"sort","email"=>$email);
-  $response = $client->send_request($req);
-  //convert std class to array
-  $array = json_decode(json_encode($response), True);
-  echo json_encode($array);
-  //print_r($array);  
-}
-
-else if($type=="uregistration"){
+else if($type=="Registration"){
     $location=$_GET['address'];
     $email=$_GET['email'];
-    $lat=$_GET['lat'];
-    $longit=$_GET['longit'];
     $pass=$_GET['password'];
     $type=$_GET['type'];
     $req = array("type"=>$type,"location"=>$location,"email"=>$email,"lat"=>$lat,"longit"=>$longit,"password"=>$pass);
