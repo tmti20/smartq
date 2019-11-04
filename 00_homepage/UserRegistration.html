@@ -1,154 +1,24 @@
-<?php
-$val1 = htmlentities($_GET['val1']);
-if( isset($val1) ) echo "Hlleo";
-?>
-
-
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Welcome to SmartQue</title>
+<title>Welcome to SmartQue</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-<!--===============================================================================================-->	
 	<link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
-<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
-<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
-<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
-<!--===============================================================================================-->	
 	<link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.min.css">
-<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
-<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="css/util.css">
 	<link rel="stylesheet" type="text/css" href="css/main.css">
-<!--==========================================Google Map start here=====================================================-->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>    
 <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAtu4HVGNms2cRNWidF0-aYE1g34j1aPGQ"></script>
 <script>
-  var geocoder;
-  var map;
-  var marker;
-  
-  /*
-   * Google Map with marker
-   */
-  function initialize() {
-	  var initialLat = $('.search_latitude').val();
-	  var initialLong = $('.search_longitude').val();
-	  initialLat = initialLat?initialLat:36.169648;
-	  initialLong = initialLong?initialLong:-115.141000;
-  
-	  var latlng = new google.maps.LatLng(initialLat, initialLong);
-	  var options = {
-		  zoom: 16,
-		  center: latlng,
-		  mapTypeId: google.maps.MapTypeId.ROADMAP
-	  };
-  
-	  map = new google.maps.Map(document.getElementById("geomap"), options);
-  
-	  geocoder = new google.maps.Geocoder();
-  
-	  marker = new google.maps.Marker({
-		  map: map,
-		  draggable: true,
-		  position: latlng
-	  });
-  
-	  google.maps.event.addListener(marker, "dragend", function () {
-		  var point = marker.getPosition();
-		  map.panTo(point);
-		  geocoder.geocode({'latLng': marker.getPosition()}, function (results, status) {
-			  if (status == google.maps.GeocoderStatus.OK) {
-				  map.setCenter(results[0].geometry.location);
-				  marker.setPosition(results[0].geometry.location);
-				  $('.search_addr').val(results[0].formatted_address);
-				  $('.search_latitude').val(marker.getPosition().lat());
-				  $('.search_longitude').val(marker.getPosition().lng());
-			  }
-		  });
-	  });
-  
-  }
-  
-  $(document).ready(function () {
-	  //load google map
-	  initialize();
-	  
-	  /*
-	   * autocomplete location search
-	   */
-	  var PostCodeid = '#search_location';
-	  $(function () {
-		  $(PostCodeid).autocomplete({
-			  source: function (request, response) {
-				  geocoder.geocode({
-					  'address': request.term
-				  }, function (results, status) {
-					  response($.map(results, function (item) {
-						  return {
-							  label: item.formatted_address,
-							  value: item.formatted_address,
-							  lat: item.geometry.location.lat(),
-							  lon: item.geometry.location.lng()
-						  };
-					  }));
-				  });
-			  },
-			  select: function (event, ui) {
-				  $('.search_addr').val(ui.item.value);
-				  $('.search_latitude').val(ui.item.lat);
-				  $('.search_longitude').val(ui.item.lon);
-				  var latlng = new google.maps.LatLng(ui.item.lat, ui.item.lon);
-				  marker.setPosition(latlng);
-				  initialize();
-			  }
-		  });
-	  });
-	  
-	  /*
-	   * Point location on google map
-	   */
-	  $('.get_map').click(function (e) {
-		  var address = $(PostCodeid).val();
-		  geocoder.geocode({'address': address}, function (results, status) {
-			  if (status == google.maps.GeocoderStatus.OK) {
-				  map.setCenter(results[0].geometry.location);
-				  marker.setPosition(results[0].geometry.location);
-				  $('.search_addr').val(results[0].formatted_address);
-				  $('.search_latitude').val(marker.getPosition().lat());
-				  $('.search_longitude').val(marker.getPosition().lng());
-			  } else {
-				  alert("Geocode was not successful for the following reason: " + status);
-			  }
-		  });
-		  e.preventDefault();
-	  });
-  
-	  //Add listener to marker for reverse geocoding
-	  google.maps.event.addListener(marker, 'drag', function () {
-		  geocoder.geocode({'latLng': marker.getPosition()}, function (results, status) {
-			  if (status == google.maps.GeocoderStatus.OK) {
-				  if (results[0]) {
-					  $('.search_addr').val(results[0].formatted_address);
-					  $('.search_latitude').val(marker.getPosition().lat());
-					  $('.search_longitude').val(marker.getPosition().lng());
-				  }
-			  }
-		  });
-	  });
-  });
-  </script>
+</script>
 <!--=============================================Google Map ends here==================================================-->
 </head>
 <body>
@@ -182,33 +52,15 @@ if( isset($val1) ) echo "Hlleo";
 <!----------- member login starts here       -->
 	<!-- search input box -->
 <div class="member">
-	<form method="GET">
-	<div class="form-group input-group">
-		<input type="text" id="search_location" class="form-control" placeholder="Search location">
-		<div class="input-group-btn">
-			<button class="btn btn-default get_map" type="submit">
-			Locate
-		</button>
-	</div>
-	</div>
-	</form>
-	<!-- display google map -->
-	<div id="geomap"></div>
-	<!-- display selected location information -->
 	<form action="../01_php_scripts/RabbitMQClientSample.php">
 	<p>Address: <input type="text" name="address" class="search_addr form-control" size="45"></p>
-	<p>Latitude: <input type="text" name="lat" class="search_latitude form-control" size="30"></p>
-	<p>Longitude: <input type="text" name="longit" class="search_longitude form-control" size="30"></p>
-	<div class="form-group">
-	<div class="form-group">
 			<label for="email">Email address:</label>
 			<input type="text" name="email" class="form-control" id="email">
-			</div>
 			<div class="form-group">
 			<label for="pwd">Password:</label>
 			<input type="text" name="password" class="form-control" id="pwd">
 	</div>
-	<input type="submit" name="type" value="uregistration" class="btn btn-default"></input>
+	<input type="submit" name="type" value="Registration" class="btn btn-default"></input>
 	</form>	
 </div>
 <!-----------member login ends here       -->

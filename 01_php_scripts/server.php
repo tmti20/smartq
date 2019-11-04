@@ -1,9 +1,20 @@
 <?php
+require_once('account.php');
 require_once('path.inc');
 require_once('get_host_info.inc');
 require_once('rabbitMQLib.inc');
-//include 'database.php';
-//$connection=new mysqli("localhost", "aj", "aj123", "rabbitMQ");
+$connection=new mysqli($hostname, $username, $mypassword, $database);
+
+function mysort($email){
+  $connection=new mysqli("192.168.1.123", "myuser", "mypass", "test");
+  $query = "select * from queue";
+  $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
+  while($row = $result->fetch_array())
+  {$rows[] = $row;}
+  return $rows;
+  //print_r($rows);
+}
+
 function udoLogin($email,$password)
 {
 $connection=new mysqli("192.168.1.123", "myuser", "mypass", "test");
@@ -22,6 +33,8 @@ return 1 ;
 return 0 ;
 }
 }
+
+//--------------client Login
 function cdoLogin($email,$password)
 {
 $connection=new mysqli("192.168.1.123", "myuser", "mypass", "test");
@@ -44,9 +57,9 @@ return 0 ;
 //register Marchant
 function cdoRegister($location,$storename,$email,$category,$lat,$longit,$password)
 { 
-$connection=new mysqli("192.168.1.123", "myuser", "mypass", "test");
 //$query = "INSERT INTO `business` VALUES ('locaiton','$storename','email','category','lat','longit','password',now())";
 // create table business( marchantid int NOT NULL AUTO_INCREMENT, location varchar(255), storename varchar(255), email varchar(255), category varchar(255), lat varchar(255), longit varchar(255), password varchar(255), timestamp varchar(255),PRIMARY KEY(marchantid));
+$connection=new mysqli("192.168.1.123", "myuser", "mypass", "test");
 $query = "INSERT INTO business(location,storename,email,category,lat,longit,password,timestamp) VALUES ('$location','$storename','$email','$category','$lat','$longit','$password',now())";
 $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
 if ($result){ return 1 ; }
@@ -57,10 +70,10 @@ else {
 //registers users
 function udoRegister($location,$email,$lat,$longit,$password)
 { 
-$connection=new mysqli("192.168.1.123", "myuser", "mypass", "test");
 //$query = "INSERT INTO `business` VALUES ('locaiton','$storename','email','category','lat','longit','password',now())";
 //udoRegister($request['location'],$request['email'],$request['lat'],$request['longit'],$request['password']);
 //create table users( userid int NOT NULL AUTO_INCREMENT,email varchar(255), userpass varchar(255), location varchar(255),lat varchar(255),longit varchar(255),PRIMARY KEY(userid));
+$connection=new mysqli("192.168.1.123", "myuser", $password, $database); 
 $query = "INSERT INTO users(location,email,lat,longit,userpass) VALUES ('$location','$email','$lat','$longit','$password')";
 $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
 if ($result){ return 1 ; }
@@ -70,7 +83,7 @@ else {
 }
 // Add queue by client
 function AddQueclient($queueid,$queueduration){
-  $connection=new mysqli("192.168.1.123", "myuser", "mypass", "test"); 
+  $connection=new mysqli("192.168.1.123", "myuser", $password, $database); 
   $query = "INSERT INTO queue(queueid, queueduration, queuetime) VALUES ($queueid,$queueduration,now())";
   $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
   if ($result){ return 1 ; }
@@ -80,7 +93,7 @@ function AddQueclient($queueid,$queueduration){
   }
 // Remove queue by client
 function removeQueclient($queueid){
-  $connection=new mysqli("192.168.1.123", "myuser", "mypass", "test"); 
+  $connection=new mysqli("192.168.1.123", "myuser", $password, $database); 
   $query = "DELETE FROM queue WHERE queueid = $queueid";
   $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
   if ($result){ return 1 ; }
@@ -88,9 +101,6 @@ function removeQueclient($queueid){
   return 0;
   }
   }
-
-
-
 function requestProcessor($request)
 {
   echo "received request".PHP_EOL;
@@ -105,7 +115,7 @@ function requestProcessor($request)
     return removeQueclient($request['queueid']);
     case "Qadd_client":
     return AddQueclient($request['queueid'],$request['queueduration']);
-    case "uLogin":
+    case "Login":
       return udoLogin($request['email'],$request['password']);
     case "cLogin":
     return cdoLogin($request['email'],$request['password']);
@@ -115,16 +125,16 @@ function requestProcessor($request)
       return cdoRegister($request['location'],$request['storename'],$request['email'],$request['category'],$request['lat'],$request['longit'],$request['password']);
       case "uregistration":
       return udoRegister($request['location'],$request['email'],$request['lat'],$request['longit'],$request['password']);
-
+      case "sort":
+      return mysort($request['email']);
     }
   return array("returnCode" => '0', 'message'=>"Server received request and processed");
 }
-
 $server = new rabbitMQServer("testRabbitMQ.ini","testServer");
-
 echo "testRabbitMQServer BEGIN".PHP_EOL;
 $server->process_requests('requestProcessor');
 echo "testRabbitMQServer END".PHP_EOL;
 exit();
 ?>
+
 

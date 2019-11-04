@@ -20,6 +20,19 @@
 	<link rel="stylesheet" type="text/css" href="css/util.css">
 	<link rel="stylesheet" type="text/css" href="css/main.css">
 <!--===============================================================================================-->
+<script>
+function login(e){
+			var str=e.value;
+			var xmlhttp = new XMLHttpRequest();
+			xmlhttp.onreadystatechange = function(){
+				if(this.readyState == 4 && this.status == 200){
+					console.log(this.responseText)
+				}
+			}
+			xmlhttp.open("GET", "suggest.php?q="+str, true);
+			xmlhttp.send();
+		}
+</script>
 </head>
 <body>
 	<div class="limiter">
@@ -77,7 +90,7 @@
 									</span>
 								</div>
 								<div class="container-login100-form-btn">
-									<input type="submit" class="login100-form-btn" name="type" value="uLogin">
+									<input type="submit" class="login100-form-btn" name="type" value="Login">
 								</input>
 								</div>
 							</form>

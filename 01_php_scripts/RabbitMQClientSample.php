@@ -2,12 +2,12 @@
 require_once('path.inc');
 require_once('get_host_info.inc');
 require_once('rabbitMQLib.inc');
-
 $client = new RabbitMQClient('testRabbitMQ.ini', 'testServer');
 //$type="login";
 //$username="azi3";
 //$pass="1234";
 $type=$_GET["type"];
+$type2="sort";
 if($type=="cregistration"){
     $location=$_GET['address'];
     $storename=$_GET['storename'];
@@ -28,6 +28,16 @@ if($type=="cregistration"){
     echo "registration is Failed \n\n";
     }    
 }
+else if($type2=="sort"){
+  $email="azi3@njit.edu";
+  $req = array("type"=>"sort","email"=>$email);
+  $response = $client->send_request($req);
+  //convert std class to array
+  $array = json_decode(json_encode($response), True);
+  echo json_encode($array);
+  //print_r($array);  
+}
+
 else if($type=="uregistration"){
     $location=$_GET['address'];
     $email=$_GET['email'];
@@ -46,7 +56,7 @@ else if($type=="uregistration"){
     echo "registration is Failed \n\n";
     }    
 }
-else if($type=="uLogin"){
+else if($type=="Login"){
     $email=$_GET["email"];
     $pass=$_GET["password"];
     $type=$_GET["type"];
@@ -135,6 +145,4 @@ else if($type=="Qremove_client"){
   echo "Failed \n\n";
   }
 }
-
-
 ?>
