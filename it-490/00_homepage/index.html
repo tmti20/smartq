@@ -92,11 +92,27 @@ function handleclick(e){
 	event.preventDefault()
 	console.log(e.value,uemail,upassword)
 	}
-	else if(e.value=='Clogin'){
+	else if(e.value=='Register as User'){
+	var uAddress=document.getElementById("uAddress").value;
 	var uemail=document.getElementById("uemail").value;
 	var upassword=document.getElementById("upassword").value;
 	event.preventDefault()
-	console.log(e.value,uemail,upassword)
+	console.log(uAddress,uemail,upassword)
+	}
+	else if(e.value=='Register as Marchant'){
+	var cAddress=document.getElementById("cAddress").value;
+	var cemail=document.getElementById("cemail").value;
+	var cpassword=document.getElementById("cpassword").value;
+	var category=document.getElementById("category").value;
+	var cstore=document.getElementById("cstore").value;
+	event.preventDefault()
+	console.log(cAddress,cemail,cpassword,category,cstore)
+	}
+	if(e.value=='cLogin'){
+	var cemail=document.getElementById("cemail").value;
+	var cpassword=document.getElementById("cpassword").value;
+	event.preventDefault()
+	console.log(e.value,cemail,cpassword)
 	}
 
 }
@@ -174,14 +190,14 @@ function handleclick(e){
 						<div class="wrap-login100">
   <div class="member">
 		<form class="login100-form validate-form" action="../01_php_scripts/RabbitMQClientSample.php">
-		<p>Address: <input type="text" name="address" class="search_addr form-control" size="45"></p>
+		<p>Address: <input id="uAddress" type="text" name="address" class="search_addr form-control" size="45"></p>
 				<label for="email">Email address:</label>
-				<input type="text" name="email" class="form-control" id="email">
+				<input id="uemail" type="text" name="email" class="form-control" id="email">
 				<div class="form-group">
-				<label for="pwd">Password:</label>
+				<label id="upassword" for="pwd">Password:</label>
 				<input type="text" name="password" class="form-control" id="pwd">
 		</div>
-		<input type="submit" name="type" value="Registration" class="btn btn-default"></input>
+		<input type="button" onclick="handleclick(this)" name="type" value="Register as User" class="btn btn-default"></input>
 		</form>	
 	</div>
 </div>
@@ -199,11 +215,11 @@ function handleclick(e){
 	
 					<form class="login100-form validate-form" method="GET" action="../01_php_scripts/RabbitMQClientSample.php">
 						<span class="login100-form-title">
-							User Login
+							Client Login
 						</span>
 	
 						<div class="wrap-input100">
-							<input class="input100" type="text" name="email" placeholder="Email">
+							<input id="cemail" class="input100" type="text" name="email" placeholder="Email">
 							<span class="focus-input100"></span>
 							<span class="symbol-input100">
 								<i class="fa fa-envelope" aria-hidden="true"></i>
@@ -211,14 +227,14 @@ function handleclick(e){
 						</div>
 	
 						<div class="wrap-input100 validate-input" data-validate = "Password is required">
-							<input class="input100" type="password" name="password" placeholder="Password">
+							<input id="cpassword" class="input100" type="password" name="password" placeholder="Password">
 							<span class="focus-input100"></span>
 							<span class="symbol-input100">
 								<i class="fa fa-lock" aria-hidden="true"></i>
 							</span>
 						</div>
 						<div class="container-login100-form-btn">
-							<input type="submit" class="login100-form-btn" name="type" value="cLogin">
+							<input type="button" onclick="handleclick(this)" class="login100-form-btn" name="type" value="cLogin">
 						</input>
 						</div>
 					</form>
@@ -233,22 +249,22 @@ function handleclick(e){
 <div class="wrap-login100">
 <div class="member">
 <form class="login100-form validate-form" action="../01_php_scripts/RabbitMQClientSample.php">
-<p>Address: <input type="text" name="address" class="search_addr form-control" size="45"></p>
+<p>Address: <input id="cAddress" type="text" name="address" class="search_addr form-control" size="45"></p>
 		<label for="email">Email address:</label>
-		<input type="text" name="email" class="form-control" id="email">
+		<input id="cemail" type="text" name="email" class="form-control" id="email">
 		<div class="form-group">
 		<label for="pwd">Password:</label>
-		<input type="text" name="password" class="form-control" id="pwd">
+		<input id="cpassword" type="text" name="password" class="form-control" id="pwd">
 		</div>
 		<div class="form-group">
 			<label for="email">Category</label>
-			<input type="text" name="category" class="form-control" id="email">
+			<input id="category" type="text" name="category" class="form-control" id="email">
 			</div>
 			<div class="form-group">
 			<label for="pwd">Store Name</label>
-			<input type="text" name="storename" class="form-control" id="pwd">
+			<input id="cstore" type="text" name="storename" class="form-control">
 		</div>
-<input type="submit" name="type" value="Registration" class="btn btn-default"></input>
+<input type="button" onclick="handleclick(this)" name="type" value="Register as Marchant" class="btn btn-default"></input>
 </form>	
 </div>
 </div>
