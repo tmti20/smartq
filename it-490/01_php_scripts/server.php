@@ -21,12 +21,12 @@ $query = "select * from users where email='$uemail' and userpass='$upassword' ";
 $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
 $count = mysqli_num_rows($result);
 if ($count >= 1){
-  $errorMsg="user with email id: ".$email." has logged in";
+  $errorMsg="user with email id: ".$uemail." has logged in";
   $query = "INSERT INTO `error`(errornumber, errormessage, errortime) VALUES ('101','$errorMsg', NOW());";
   $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
 return 1 ;
 }else{
-  $errorMsg="user with email id: ".$email." login failed";
+  $errorMsg="user with email id: ".$uemail." login failed";
   $query = "INSERT INTO `error`(errornumber, errormessage, errortime) VALUES ('101','$errorMsg', NOW());";
   $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
 return 0 ;

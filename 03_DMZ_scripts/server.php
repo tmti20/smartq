@@ -1,30 +1,18 @@
 <?php
-require_once('account.php');
+//require_once('account.php');
 require_once('path.inc');
 require_once('get_host_info.inc');
 require_once('rabbitMQLib.inc');
-$connection=new mysqli($hostname, $username, $mypassword, $database);
+$client = new RabbitMQClient('testRabbitMQ_dmz_reciever.ini', 'testServer');
+//$connection=new mysqli($hostname, $username, $mypassword, $database);
 function write_to_text($filename,$txt){
   $myfile = fopen($filename, "a") or die("Unable to open file!");
   fwrite($myfile, $txt);
   fclose($myfile); 
   }  
-function testRegister($type,$name)
-{ 
-//$query = "INSERT INTO `business` VALUES ('locaiton','$storename','email','category','lat','longit','password',now())";
-// create table business( marchantid int NOT NULL AUTO_INCREMENT, location varchar(255), storename varchar(255), email varchar(255), category varchar(255), lat varchar(255), longit varchar(255), password varchar(255), timestamp varchar(255),PRIMARY KEY(marchantid));
-$connection=new mysqli("192.168.1.123", "myuser", "mypass", "test");
-$query = "INSERT INTO test(name) values('$name')";
-$result = mysqli_query($connection, $query) or die(mysqli_error($connection));
-if ($result){ return 1 ; }
-else { 
-  return 0 ;
-}
-}
+// Client registration
 function cdoRegister($location,$storename,$email,$category,$lat,$longit,$password)
 { 
-//$query = "INSERT INTO `business` VALUES ('locaiton','$storename','email','category','lat','longit','password',now())";
-// create table business( marchantid int NOT NULL AUTO_INCREMENT, location varchar(255), storename varchar(255), email varchar(255), category varchar(255), lat varchar(255), longit varchar(255), password varchar(255), timestamp varchar(255),PRIMARY KEY(marchantid));
 $connection=new mysqli("192.168.1.123", "myuser", "mypass", "test");
 $query = "INSERT INTO business(location,storename,email,category,lat,longit,password,timestamp) VALUES ('$location','$storename','$email','$category','$lat','$longit','$password',now())";
 $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
@@ -33,7 +21,7 @@ else {
   return 0 ;
 }
 }
-//registers users
+// User Registration
 function udoRegister($location,$email,$password)
 {
 $lat=0;
@@ -67,12 +55,10 @@ function requestProcessor($request)
   }
   switch ($request['type'])
   {
-    case "reg":
-      return testRegister($request['type'],$request['name']);
     case "cregistration":
       return cdoRegister($request['location'],$request['storename'],$request['email'],$request['category'],$request['lat'],$request['longit'],$request['password']);
-      case "Registration":
-      return udoRegister($request['location'],$request['email'],$request['password']);
+      case "Uregistration":
+      return udoRegister($request['uaddress'],$request['uemail'],$request['upassword']);
     }
   return array("returnCode" => '0', 'message'=>"Server received request and processed");
 }

@@ -6,3 +6,11 @@ Request processed : latitude is: 40.7366266 Longgitute is: -74.2475873 Time is: 
 Request processed : latitude is: 40.7366266 Longgitute is: -74.2475873 Time is: 2019-11-04 12:22:06
 Request processed : latitude is: 40.7428189 Longgitute is: -74.1770705 Time is: 2019-11-04 12:23:12
 Request processed : latitude is: 40.4977368 Longgitute is: -74.6508245 Time is: 2019-11-04 12:23:39
+Request processed : latitude is: 40.7366266 Longgitute is: -74.2475873 Time is: 2019-11-05 06:08:17
+Request processed : latitude is: 40.7366266 Longgitute is: -74.2475873 Time is: 2019-11-05 06:09:08
+Request processed : latitude is: 40.7366266 Longgitute is: -74.2475873 Time is: 2019-11-05 06:10:31
+Request processed : latitude is: 40.7366266 Longgitute is: -74.2475873 Time is: 2019-11-05 06:11:45
+Request processed : latitude is: 40.7366266 Longgitute is: -74.2475873 Time is: 2019-11-05 06:13:26
+Request processed : latitude is: 40.7366266 Longgitute is: -74.2475873 Time is: 2019-11-05 06:14:09
+Request processed : latitude is: 40.4977368 Longgitute is: -74.6508245 Time is: 2019-11-05 06:14:33
+Request processed : latitude is: 40.7366266 Longgitute is: -74.2475873 Time is: 2019-11-05 06:15:15

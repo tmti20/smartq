@@ -133,7 +133,7 @@ function handleclick(e){
             }
         }
 		//xmlhttp.open("GET", "../01_php_scripts/RabbitMQClientSample.php?type=Ulogin"+"&email="+uemail+"&password="+upassword, true);
-		xmlhttp.open("GET", "../01_php_scripts/RabbitMQClientSample.php?type=Uregistration"+"&uemail="+uemail+"&upassword="+upassword+"Uaddress"+Uaddress, true);
+		xmlhttp.open("GET", "../01_php_scripts/reg_dmz.php?type=Uregistration"+"&uemail="+uemail+"&upassword="+upassword+"&uaddress="+Uaddress, true);
         xmlhttp.send();
 	}
 	else if(e.value=='Register as Marchant'){
