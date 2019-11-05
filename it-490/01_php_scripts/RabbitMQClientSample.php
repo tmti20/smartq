@@ -7,15 +7,18 @@ $client = new RabbitMQClient('testRabbitMQ.ini', 'testServer');
 //$username="azi3";
 //$pass="1234";
 $type=$_GET["type"];
-$type2="sort1";
+$type2="sort";
 $type3="reg1";
-if($type2=="sort"){
-  $email="azi3@njit.edu";
-  $req = array("type"=>"sort","email"=>$email);
+//----------------------------------------------------
+if($type=="sort"){
+  $uemail=$_GET["uemail"];
+  //$email="azi3@njit.edu";
+  $req = array("type"=>"sort","email"=>$uemail);
   $response = $client->send_request($req);
   //convert std class to array
   $array = json_decode(json_encode($response), True);
   echo json_encode($array);
+  //echo json_encode($array);
   //print_r($array);  
 }
 else if($type3=="reg"){
@@ -46,12 +49,12 @@ else if($type=="cregistration"){
     echo "registration is Failed \n\n";
     }    
 }
-else if($type=="Registration"){
-    $location=$_GET['address'];
-    $email=$_GET['email'];
-    $pass=$_GET['password'];
+else if($type=="Uregistration"){
+    $Uaddress=$_GET['Uaddress'];
+    $uemail=$_GET['uemail'];
+    $upassword=$_GET['upassword'];
     $type=$_GET['type'];
-    $req = array("type"=>$type,"location"=>$location,"email"=>$email,"lat"=>$lat,"longit"=>$longit,"password"=>$pass);
+    $req = array("type"=>$type,"Uaddress"=>$Uaddress,"uemail"=>$uemail,"upassword"=>$upassword);
     $response = $client->send_request($req);
     //convert std class to array
     //print_r($response);
@@ -62,26 +65,16 @@ else if($type=="Registration"){
     echo "registration is Failed \n\n";
     }    
 }
-else if($type=="Login"){
-    $email=$_GET["email"];
-    $pass=$_GET["password"];
+else if($type=="Ulogin"){
+    $uemail=$_GET["uemail"];
+    $upassword=$_GET["upassword"];
     $type=$_GET["type"];
-    $req = array("type"=>$type,"email"=>$email, "type"=>$type,"password"=>$pass);
+    $req = array("type"=>$type,"uemail"=>$uemail,"upassword"=>$upassword);
     $response = $client->send_request($req);
     //convert std class to array
     //print_r($response);
     if($response==1){
-        echo '
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-           <div class="collapse navbar-collapse" id="navbarNav">
-             <ul class="navbar-nav">
-               <li class="nav-item active">
-                 <a class="nav-link" href="./01_userLoggedIn/userLoggedIn.php">Enter</a>
-               </li>
-             </ul>
-           </div>
-         </nav>		
-           ';
+      echo 1;
     }
     else{
     echo "Login Failed \n\n";

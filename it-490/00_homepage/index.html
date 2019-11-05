@@ -86,18 +86,55 @@ function login(e){
   evt.currentTarget.className += " active";
 }
 function handleclick(e){
+// -----------------------------------------------------------------------user login
 	if(e.value=='Ulogin'){
 	var uemail=document.getElementById("uemail").value;
 	var upassword=document.getElementById("upassword").value;
 	event.preventDefault()
-	console.log(e.value,uemail,upassword)
+	//console.log(e.value,uemail,upassword)
+	var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+				//console.log(this.responseText)
+				if(this.response==1){
+				window.location.href = "userloggedin.html";
+					//alert("success")
+				}
+				else{
+					alert("Login failed! Try again");
+				}
+				//alert(this.responseText);
+            }
+        }
+		//xmlhttp.open("GET", "../01_php_scripts/RabbitMQClientSample.php?type=Ulogin"+"&email="+uemail+"&password="+upassword, true);
+		xmlhttp.open("GET", "../01_php_scripts/RabbitMQClientSample.php?type=Ulogin"+"&uemail="+uemail+"&upassword="+upassword, true);
+        xmlhttp.send();
 	}
+// -----------------------------------------------------------------------user registration
 	else if(e.value=='Register as User'){
-	var uAddress=document.getElementById("uAddress").value;
+	var Uaddress=document.getElementById("Uaddress").value;
 	var uemail=document.getElementById("uemail").value;
 	var upassword=document.getElementById("upassword").value;
+	//console.log(Uaddress)
 	event.preventDefault()
-	console.log(uAddress,uemail,upassword)
+	console.log(Uaddress,uemail,upassword)
+	var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+				//console.log(this.responseText)
+				if(this.response==1){
+				//window.location.href = "userloggedin.html";
+					alert("success")
+				}
+				else{
+					alert("failed! Try again");
+				}
+				//alert(this.responseText);
+            }
+        }
+		//xmlhttp.open("GET", "../01_php_scripts/RabbitMQClientSample.php?type=Ulogin"+"&email="+uemail+"&password="+upassword, true);
+		xmlhttp.open("GET", "../01_php_scripts/RabbitMQClientSample.php?type=Uregistration"+"&uemail="+uemail+"&upassword="+upassword+"Uaddress"+Uaddress, true);
+        xmlhttp.send();
 	}
 	else if(e.value=='Register as Marchant'){
 	var cAddress=document.getElementById("cAddress").value;
@@ -204,7 +241,7 @@ function showHint(str) {
 						<div class="wrap-login100">
   <div class="member">
 		<form class="login100-form validate-form" action="../01_php_scripts/RabbitMQClientSample.php">
-		<p>Address: <input id="uAddress" type="text" name="address" class="search_addr form-control" size="45"></p>
+		<p>Address: <input id="Uaddress" type="text" name="address" class="search_addr form-control" size="45"></p>
 				<label for="email">Email address:</label>
 				<input id="uemail" type="text" name="email" class="form-control" id="email">
 				<div class="form-group">

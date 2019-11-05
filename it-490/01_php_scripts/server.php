@@ -4,9 +4,9 @@ require_once('get_host_info.inc');
 require_once('rabbitMQLib.inc');
 //$connection=new mysqli($hostname, $username, $mypassword, $database);
 
-function mysort($email){
+function mysort($email,$password){
   $connection=new mysqli("192.168.1.123", "myuser", "mypass", "test");
-  $query = "select * from queue";
+  $query = "select * from users where email='$email'";
   $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
   while($row = $result->fetch_array())
   {$rows[] = $row;}
@@ -14,10 +14,10 @@ function mysort($email){
   //print_r($rows);
 }
 
-function udoLogin($email,$password)
+function udoLogin($uemail,$upassword)
 {
 $connection=new mysqli("192.168.1.123", "myuser", "mypass", "test");
-$query = "select * from users where email='$email' and userpass='$password' ";
+$query = "select * from users where email='$uemail' and userpass='$upassword' ";
 $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
 $count = mysqli_num_rows($result);
 if ($count >= 1){
@@ -73,7 +73,7 @@ function udoRegister($location,$email,$lat,$longit,$password)
 //udoRegister($request['location'],$request['email'],$request['lat'],$request['longit'],$request['password']);
 //create table users( userid int NOT NULL AUTO_INCREMENT,email varchar(255), userpass varchar(255), location varchar(255),lat varchar(255),longit varchar(255),PRIMARY KEY(userid));
 $connection=new mysqli("192.168.1.123", "myuser", $password, $database); 
-$query = "INSERT INTO users(location,email,lat,longit,userpass) VALUES ('$location','$email','$lat','$longit','$password')";
+$query = "INSERT INTO users(location,email,lat,longit,userpass) VALUES ('$location','$email','lat','longit','$password')";
 $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
 if ($result){ return 1 ; }
 else { 
@@ -114,8 +114,8 @@ function requestProcessor($request)
     return removeQueclient($request['queueid']);
     case "Qadd_client":
     return AddQueclient($request['queueid'],$request['queueduration']);
-    case "Login":
-      return udoLogin($request['email'],$request['password']);
+    case "Ulogin":
+      return udoLogin($request['uemail'],$request['upassword']);
     case "cLogin":
     return cdoLogin($request['email'],$request['password']);
     case "validate_session":
@@ -123,9 +123,9 @@ function requestProcessor($request)
     case "cregistration":
       return cdoRegister($request['location'],$request['storename'],$request['email'],$request['category'],$request['lat'],$request['longit'],$request['password']);
       case "uregistration":
-      return udoRegister($request['location'],$request['email'],$request['lat'],$request['longit'],$request['password']);
+      return udoRegister($request['Uaddress'],$request['uemail'],$request['lat'],$request['longit'],$request['upassword']);
       case "sort":
-      return mysort($request['email']);
+      return mysort($request['email'],$request["password"]);
     }
   return array("returnCode" => '0', 'message'=>"Server received request and processed");
 }
