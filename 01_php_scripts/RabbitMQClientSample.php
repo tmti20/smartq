@@ -30,36 +30,34 @@ else if($type3=="reg"){
   //print_r($array);  
 }
 else if($type=="cregistration"){
-    $location=$_GET['address'];
-    $storename=$_GET['storename'];
-    $email=$_GET['email'];
-    $category=$_GET['category'];
-    $lat=$_GET['lat'];
-    $longit=$_GET['longit'];
-    $pass=$_GET['password'];
+    $caddress=$_GET['caddress'];
+    $cstorename=$_GET['cstore'];
+    $cemail=$_GET['cemail'];
+    $ccategory=$_GET['ccategory'];
+    $cpassword=$_GET['cpassword'];
     $type=$_GET['type'];
-    $req = array("type"=>$type,"location"=>$location,"storename"=>$storename,"email"=>$email,"category"=>$category,"lat"=>$lat,"longit"=>$longit,"password"=>$pass);
+    $req = array("type"=>$type,"caddress"=>$caddress,"cstore"=>$cstorename,"cemail"=>$cemail,"ccategory"=>$ccategory,"cpassword"=>$cpassword);
     $response = $client->send_request($req);
     //convert std class to array
     //print_r($response);
     if($response==1){
-     echo "Your registration is succesfull \n\n";
+     echo 1;
     }
     else{
     echo "registration is Failed \n\n";
     }    
 }
-else if($type=="Uregistration"){
-    $Uaddress=$_GET['Uaddress'];
+else if($type=="uregistration"){
+    $uaddress=$_GET['uaddress'];
     $uemail=$_GET['uemail'];
     $upassword=$_GET['upassword'];
     $type=$_GET['type'];
-    $req = array("type"=>$type,"Uaddress"=>$Uaddress,"uemail"=>$uemail,"upassword"=>$upassword);
+    $req = array("type"=>$type,"uaddress"=>$uaddress,"uemail"=>$uemail,"upassword"=>$upassword);
     $response = $client->send_request($req);
     //convert std class to array
     //print_r($response);
     if($response==1){
-     echo "Your registration is succesfull \n\n";
+     echo 1;
     }
     else{
     echo "registration is Failed \n\n";
@@ -81,27 +79,15 @@ else if($type=="Ulogin"){
     }
 }
 else if($type=="cLogin"){
-    $email=$_GET["email"];
-    $pass=$_GET["password"];
+    $cemail=$_GET["cemail"];
+    $cpassword=$_GET["cpassword"];
     $type=$_GET["type"];
-    $req = array("type"=>$type,"email"=>$email, "type"=>$type,"password"=>$pass);
+    $req = array("type"=>$type,"cemail"=>$cemail, "type"=>$type,"cpassword"=>$cpassword);
     $response = $client->send_request($req);
     //convert std class to array
     //print_r($response);
     if($response==1){
-     echo '
-     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-		<div class="collapse navbar-collapse" id="navbarNav">
-		  <ul class="navbar-nav">
-			<li class="nav-item active">
-			  <a class="nav-link" href="./02_client_loggedIn/clientLoggedIn.php">Enter</span></a>
-			</li>
-		  </ul>
-		</div>
-	  </nav>		
-        ';
-        //echo "Your login is succesfull \n\n";
-     //header("Location: http://localhost/it-490/01_php_scripts/02_client_loggedIn/clientLoggedIn.php");
+     echo 1; 
     }
     else{
     echo "Login Failed \n\n";

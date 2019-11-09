@@ -98,7 +98,7 @@ function handleclick(e){
 				//console.log(this.responseText)
 				if(this.response==1){
 				window.location.href = "userloggedin.html";
-					//alert("success")
+					alert("success")
 				}
 				else{
 					alert("Login failed! Try again");
@@ -121,10 +121,35 @@ function handleclick(e){
 	var xmlhttp = new XMLHttpRequest();
         xmlhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
-				//console.log(this.responseText)
+				console.log(this.responseText)
 				if(this.response==1){
-				//window.location.href = "userloggedin.html";
-					alert("success")
+				window.location.href = "index.html";
+					alert("success! Redirecting to homepage....")
+				}
+				else{
+					alert("failed! Try again");
+				}	
+            }
+        }
+		xmlhttp.open("GET", "../01_php_scripts/RabbitMQClientSample.php?type=uregistration"+"&uemail="+uemail+"&upassword="+upassword+"&uaddress="+Uaddress, true);
+        xmlhttp.send();
+	}
+// -----------------------------------------------------------------------client registration
+	else if(e.value=='Register as Marchant'){
+	var caddress=document.getElementById("cAddress").value;
+	var cemail=document.getElementById("cemail").value;
+	var cpassword=document.getElementById("cpassword").value;
+	var ccategory=document.getElementById("category").value;
+	var cstore=document.getElementById("cstore").value;
+	event.preventDefault()
+	console.log(cAddress,cemail,cpassword,category,cstore)
+	var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+				console.log(this.responseText)
+				if(this.response==1){
+				window.location.href = "index.html";
+					alert("success! Redirecting to homepage....")
 				}
 				else{
 					alert("failed! Try again");
@@ -133,23 +158,32 @@ function handleclick(e){
             }
         }
 		//xmlhttp.open("GET", "../01_php_scripts/RabbitMQClientSample.php?type=Ulogin"+"&email="+uemail+"&password="+upassword, true);
-		xmlhttp.open("GET", "../01_php_scripts/reg_dmz.php?type=Uregistration"+"&uemail="+uemail+"&upassword="+upassword+"&uaddress="+Uaddress, true);
+		xmlhttp.open("GET", "../01_php_scripts/RabbitMQClientSample.php?type=cregistration"+"&cemail="+cemail+"&cpassword="+cpassword+"&caddress="+caddress+"&ccategory="+ccategory+"&cstore="+cstore, true);
         xmlhttp.send();
 	}
-	else if(e.value=='Register as Marchant'){
-	var cAddress=document.getElementById("cAddress").value;
-	var cemail=document.getElementById("cemail").value;
-	var cpassword=document.getElementById("cpassword").value;
-	var category=document.getElementById("category").value;
-	var cstore=document.getElementById("cstore").value;
-	event.preventDefault()
-	console.log(cAddress,cemail,cpassword,category,cstore)
-	}
+// Check client login
 	if(e.value=='cLogin'){
 	var cemail=document.getElementById("cemail").value;
 	var cpassword=document.getElementById("cpassword").value;
 	event.preventDefault()
 	console.log(e.value,cemail,cpassword)
+	var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+				console.log(this.responseText)
+				if(this.response==1){
+				window.location.href = "clientloggedin.html";
+				alert("success")
+				}
+				else{
+					alert("failed! Try again");
+				}
+				//alert(this.responseText);
+            }
+        }
+		//xmlhttp.open("GET", "../01_php_scripts/RabbitMQClientSample.php?type=Ulogin"+"&email="+uemail+"&password="+upassword, true);
+		xmlhttp.open("GET", "../01_php_scripts/RabbitMQClientSample.php?type=cLogin"+"&cemail="+cemail+"&cpassword="+cpassword, true);
+        xmlhttp.send();
 	}
 }
 function showHint(str) {
@@ -255,7 +289,7 @@ function showHint(str) {
 </div>
 </div>
 </div>
-<!----------- client login starts here       -->
+<!----------- Merchant login starts here       -->
 <div id="client_login" class="tabcontent">
 	<div class="container-login100 member">
 		<div class="container-login100">
@@ -264,7 +298,7 @@ function showHint(str) {
 						<img src="images/img-01.png" alt="IMG">
 					</div>
 	
-					<form class="login100-form validate-form" method="GET" action="../01_php_scripts/RabbitMQClientSample.php">
+					<form class="login100-form validate-form">
 						<span class="login100-form-title">
 							Client Login
 						</span>
