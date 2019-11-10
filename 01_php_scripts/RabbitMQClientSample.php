@@ -21,13 +21,17 @@ if($type=="sort"){
   //echo json_encode($array);
   //print_r($array);  
 }
-else if($type3=="reg"){
-  $name="mamun";
-  $req = array("type"=>"reg","name"=>$name);
+else if($type=="category"){
+  $req = array("type"=>"category");
   $response = $client->send_request($req);
-  //convert std class to array
-  echo $response;
-  //print_r($array);  
+  $response = $client->send_request($req);
+  if($response==1){
+    echo json_encode("hi");
+   }
+   else{
+    echo json_encode("Failed");
+   }
+  //echo $response;
 }
 else if($type=="cregistration"){
     $caddress=$_GET['caddress'];

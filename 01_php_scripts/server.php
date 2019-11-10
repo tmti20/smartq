@@ -97,6 +97,15 @@ function removeQueclient($queueid){
   return 0;
   }
   }
+function category(){
+$connection=new mysqli("192.168.1.123", "myuser", "mypass", "test"); 
+$query = "select category from business";
+$result = mysqli_query($connection, $query) or die(mysqli_error($connection));
+if ($result){ return 1 ;}
+else { 
+  return 0 ;
+}
+}
 function requestProcessor($request)
 {
   echo "received request".PHP_EOL;
@@ -123,6 +132,9 @@ function requestProcessor($request)
       return udoRegister($request['uaddress'],$request['uemail'],$request['upassword']);
       case "sort":
       return mysort($request['email'],$request["password"]);
+      case "category":
+      return category();
+
     }
   return array("returnCode" => '0', 'message'=>"Server received request and processed");
 }

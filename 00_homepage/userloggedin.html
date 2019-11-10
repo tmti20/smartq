@@ -13,7 +13,8 @@
 	<link rel="stylesheet" type="text/css" href="css/util.css">
 	<link rel="stylesheet" type="text/css" href="css/main.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>    
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> 
+<script src="js/userloggedin.js"></script>    
 <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAtu4HVGNms2cRNWidF0-aYE1g34j1aPGQ"></script>
@@ -59,14 +60,10 @@
 </style>
 <script>
 	function openCity(evt, cityName) {
-	  var i, tabcontent, tablinks;
+	  var i, tabcontent;
 	  tabcontent = document.getElementsByClassName("tabcontent");
 	  for (i = 0; i < tabcontent.length; i++) {
 		tabcontent[i].style.display = "none";
-	  }
-	  tablinks = document.getElementsByClassName("tablinks");
-	  for (i = 0; i < tablinks.length; i++) {
-		tablinks[i].className = tablinks[i].className.replace(" active", "");
 	  }
 	  document.getElementById(cityName).style.display = "block";
 	  evt.currentTarget.className += " active";
@@ -102,18 +99,24 @@
 	<!-- search input box -->
 <div class="member">
 	<div id="London" class="tabcontent">
-		<h3>London</h3>
-		<p>London is the capital city of England.</p>
-	  </div>
+		<h3>Search By</h3>
+		<select onchange="marchant_search(event)">
+			<option value="Category">Category</option>
+			<option value="Distance">Distance</option>
+			<option value="Queue">Queue length</option>
+		</select>
+	<div id="usercontainer">
+	</div>
+	</div>
 	  
 	  <div id="Paris" class="tabcontent">
 		<h3>Paris</h3>
-		<p>Paris is the capital of France.</p> 
+		
 	  </div>
 	  
 	  <div id="Tokyo" class="tabcontent">
 		<h3>Tokyo</h3>
-		<p>Tokyo is the capital of Japan.</p>
+		
 	</div>
 </div>
 <!-----------member login ends here       -->
