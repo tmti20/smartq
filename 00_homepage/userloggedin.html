@@ -17,9 +17,61 @@
 <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAtu4HVGNms2cRNWidF0-aYE1g34j1aPGQ"></script>
+<style>
+	body {font-family: Arial;}
+	
+	/* Style the tab */
+	.tab {
+	  overflow: hidden;
+	  border: 1px solid #ccc;
+	  background-color: #f1f1f1;
+	}
+	
+	/* Style the buttons inside the tab */
+	.tab button {
+	  background-color: inherit;
+	  float: left;
+	  border: none;
+	  outline: none;
+	  cursor: pointer;
+	  padding: 14px 16px;
+	  transition: 0.3s;
+	  font-size: 17px;
+	}
+	
+	/* Change background color of buttons on hover */
+	.tab button:hover {
+	  background-color: #ddd;
+	}
+	
+	/* Create an active/current tablink class */
+	.tab button.active {
+	  background-color: #ccc;
+	}
+	
+	/* Style the tab content */
+	.tabcontent {
+	  display: none;
+	  padding: 6px 12px;
+	  border: 1px solid #ccc;
+	  border-top: none;
+	}
+</style>
 <script>
+	function openCity(evt, cityName) {
+	  var i, tabcontent, tablinks;
+	  tabcontent = document.getElementsByClassName("tabcontent");
+	  for (i = 0; i < tabcontent.length; i++) {
+		tabcontent[i].style.display = "none";
+	  }
+	  tablinks = document.getElementsByClassName("tablinks");
+	  for (i = 0; i < tablinks.length; i++) {
+		tablinks[i].className = tablinks[i].className.replace(" active", "");
+	  }
+	  document.getElementById(cityName).style.display = "block";
+	  evt.currentTarget.className += " active";
+	}
 </script>
-<!--=============================================Google Map ends here==================================================-->
 </head>
 <body>
 	<div class="limiter">
@@ -34,13 +86,13 @@
 		  <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
 		</li>
 		<li class="nav-item">
-		  <a class="nav-link">Search Merchant</a>
+		  <a class="nav-link" onclick="openCity(event, 'London')">Search Merchant</a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link">Wait Time</a>
+			<a class="nav-link" onclick="openCity(event, 'Paris')">Wait Time</a>
 		</li>
 		<li class="nav-item">
-		  <a class="nav-link">View Queue</a>
+		  <a class="nav-link" onclick="openCity(event, 'Tokyo')">View Queue</a>
 		</li>
 	  </ul>
 	</div>
@@ -49,7 +101,20 @@
 <!----------- member login starts here       -->
 	<!-- search input box -->
 <div class="member">
-	
+	<div id="London" class="tabcontent">
+		<h3>London</h3>
+		<p>London is the capital city of England.</p>
+	  </div>
+	  
+	  <div id="Paris" class="tabcontent">
+		<h3>Paris</h3>
+		<p>Paris is the capital of France.</p> 
+	  </div>
+	  
+	  <div id="Tokyo" class="tabcontent">
+		<h3>Tokyo</h3>
+		<p>Tokyo is the capital of Japan.</p>
+	</div>
 </div>
 <!-----------member login ends here       -->
 </div>
