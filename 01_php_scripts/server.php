@@ -1,4 +1,7 @@
 <?php
+session_start();
+//$_SESSION["authenticated"] = False;
+
 require_once('path.inc');
 require_once('get_host_info.inc');
 require_once('rabbitMQLib.inc');
@@ -21,13 +24,14 @@ $query = "select * from users where email='$uemail' and userpass='$upassword' ";
 $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
 $count = mysqli_num_rows($result);
 if ($count >= 1){
+  //$_SESSION["authenticated"] = False;
   $errorMsg="user with email id: ".$uemail." has logged in";
-  $query = "INSERT INTO `error`(errornumber, errormessage, errortime) VALUES ('101','$errorMsg', NOW());";
+  $query = "INSERT INTO `error`(errormessage, errortime) VALUES ('$errorMsg', NOW());";
   $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
 return 1 ;
 }else{
   $errorMsg="user with email id: ".$uemail." login failed";
-  $query = "INSERT INTO `error`(errornumber, errormessage, errortime) VALUES ('101','$errorMsg', NOW());";
+  $query = "INSERT INTO `error`(errormessage, errortime) VALUES ('$errorMsg', NOW());";
   $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
 return 0 ;
 }
@@ -37,18 +41,19 @@ return 0 ;
 function cdoLogin($email,$password)
 {
 $connection=new mysqli("192.168.1.123", "myuser", "mypass", "test");
-$query = "select * from business where email='$email' and password='$password' ";
+$query = "select * from business where email='$email' and merchantpass ='$password' ";
 $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
 $count = mysqli_num_rows($result);
 if ($count >= 1){
+  $_SESSION["authenticated"] = True;
   $errorMsg="client with email id: ".$email." has logged in";
-  $query = "INSERT INTO `error`(errornumber, errormessage, errortime) VALUES ('101','$errorMsg', NOW());";
+  $query = "INSERT INTO `error`( errormessage, errortime) VALUES ('$errorMsg', NOW());";
   $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
   return 1;
 
 }else{
   $errorMsg="client with email id: ".$email." login failed";
-  $query = "INSERT INTO `error`(errornumber, errormessage, errortime) VALUES ('101','$errorMsg', NOW());";
+  $query = "INSERT INTO `error`( errormessage, errortime) VALUES ('$errorMsg', NOW());";
   $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
 return 0 ;
 }
@@ -58,7 +63,7 @@ function cdoRegister($caddress,$cstore,$email,$category,$password)
 { 
 // return cdoRegister($request['caddress'],$request['cstore'],$request['cemail'],$request['ccategory'],$request['cpassword']);
 $connection=new mysqli("192.168.1.123", "myuser", "mypass", "test");
-$query = "INSERT INTO business(location,storename,email,category,password,timestamp) VALUES ('$caddress','$cstore','$email','$category','$password',now())";
+$query = "INSERT INTO business(location,storename,email,category,merchantpass,timestamp) VALUES ('$caddress','$cstore','$email','$category','$password',now())";
 $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
 if ($result){ return 1 ; }
 else { 
@@ -70,7 +75,8 @@ function udoRegister($location,$email,$password)
 { 
 //      return udoRegister($request['uaddress'],$request['uemail'],$request['upassword']);
 $connection=new mysqli("192.168.1.123", "myuser", "mypass", "test"); 
-$query = "INSERT INTO users(location,email,userpass) VALUES ('$location','$email','$password')";
+$query = "INSERT INTO users(location, email,userpass ) VALUES ('$location','$email','$password' )";
+//$query = "INSERT INTO users(email,userpass, location, lat, longit) VALUES ('akm@gmail.com','123','newark','123','345')";
 $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
 if ($result){ return 1 ; }
 else { 

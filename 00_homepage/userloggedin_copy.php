@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Welcome to SmartQueue</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
+	<link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
+	<link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.min.css">
+	<link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
+	<link rel="stylesheet" type="text/css" href="css/util.css">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> 
+<script src="js/userloggedin.js"></script>    
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAtu4HVGNms2cRNWidF0-aYE1g34j1aPGQ"></script>
+<style>
+	body {font-family: Arial;}
+	
+	/* Style the tab */
+	.tab {
+	  overflow: hidden;
+	  border: 1px solid #ccc;
+	  background-color: #f1f1f1;
+	}
+	
+	/* Style the buttons inside the tab */
+	.tab button {
+	  background-color: inherit;
+	  float: left;
+	  border: none;
+	  outline: none;
+	  cursor: pointer;
+	  padding: 14px 16px;
+	  transition: 0.3s;
+	  font-size: 17px;
+	}
+	
+	/* Change background color of buttons on hover */
+	.tab button:hover {
+	  background-color: #ddd;
+	}
+	
+	/* Create an active/current tablink class */
+	.tab button.active {
+	  background-color: #ccc;
+	}
+	
+	/* Style the tab content */
+	.tabcontent {
+	  display: none;
+	  padding: 6px 12px;
+	  border: 1px solid #ccc;
+	  border-top: none;
+	}
+</style>
+<script>
+	function openCity(evt, cityName) {
+	  var i, tabcontent;
+	  tabcontent = document.getElementsByClassName("tabcontent");
+	  for (i = 0; i < tabcontent.length; i++) {
+		tabcontent[i].style.display = "none";
+	  }
+	  document.getElementById(cityName).style.display = "block";
+	  evt.currentTarget.className += " active";
+	}
+
+</script>
+</head>
+<body>
+	<div class="limiter">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+	<a class="navbar-brand" href="index.html">SmartQueue</a>
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+	  <span class="navbar-toggler-icon"></span>
+	</button>
+	<div class="collapse navbar-collapse" id="navbarNav">
+	  <ul class="navbar-nav">
+		<li class="nav-item active">
+		  <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+		</li>
+		<li class="nav-item">
+		  <a class="nav-link" onclick="openCity(event, 'search')">Search Merchant</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" onclick="openCity(event, 'Paris')">Wait Time</a>
+		</li>
+		<li class="nav-item">
+		  <a class="nav-link" onclick="openCity(event, 'Tokyo')">View Queue</a>
+		</li>
+	  </ul>
+	</div>
+  </nav>	
+
+<!----------- member login starts here       -->
+	<!-- search input box -->
+<div class="member">
+	<div id="search" class="tabcontent">
+		<h3>Search By</h3>
+		<?php include ("category.php"); ?>
+		<!------- <select onchange="marchant_search(event)">
+			<option value="Category">Category</option>
+			<option value="Distance">Distance</option>
+			<option value="Queue">Queue length</option>
+		</select> -->
+	<div id="usercontainer">
+	</div>
+	</div>
+	  
+	  <div id="Paris" class="tabcontent">
+		<h3>Paris</h3>
+		
+	  </div>
+	  
+	  <div id="Tokyo" class="tabcontent">
+		<h3>Tokyo</h3>
+		
+	</div>
+</div>
+<!-----------member login ends here       -->
+</div>
+</body>
+</html>
