@@ -14,7 +14,7 @@
 //$_SESSION["username"] = $username;
 $username = $_SESSION["username"];
 include "header.php";
-echo " $username";
+//echo " $username";
 ?>
 
 

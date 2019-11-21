@@ -8,7 +8,7 @@ require_once('rabbitMQLib.inc');
 //$connection=new mysqli($hostname, $username, $mypassword, $database);
 
 function mysort($email,$password){
-  $connection=new mysqli("192.168.1.123", "myuser", "mypass", "test");
+  $connection=new mysqli("192.168.1.130", "myuser", "mypass", "test");
   $query = "select * from users where email='$email'";
   $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
   while($row = $result->fetch_array())
@@ -19,7 +19,7 @@ function mysort($email,$password){
 
 function udoLogin($uemail,$upassword)
 {
-$connection=new mysqli("192.168.1.123", "myuser", "mypass", "test");
+$connection=new mysqli("192.168.1.130", "myuser", "mypass", "test");
 $query = "select * from users where email='$uemail' and userpass='$upassword' ";
 $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
 $count = mysqli_num_rows($result);
@@ -40,7 +40,7 @@ return 0 ;
 //--------------client Login
 function cdoLogin($email,$password)
 {
-$connection=new mysqli("192.168.1.123", "myuser", "mypass", "test");
+$connection=new mysqli("192.168.1.130", "myuser", "mypass", "test");
 $query = "select * from business where email='$email' and merchantpass ='$password' ";
 $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
 $count = mysqli_num_rows($result);
@@ -62,7 +62,7 @@ return 0 ;
 function cdoRegister($caddress,$cstore,$email,$category,$password)
 { 
 // return cdoRegister($request['caddress'],$request['cstore'],$request['cemail'],$request['ccategory'],$request['cpassword']);
-$connection=new mysqli("192.168.1.123", "myuser", "mypass", "test");
+$connection=new mysqli("192.168.1.130", "myuser", "mypass", "test");
 $query = "INSERT INTO business(location,storename,email,category,merchantpass,timestamp) VALUES ('$caddress','$cstore','$email','$category','$password',now())";
 $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
 if ($result){ return 1 ; }
@@ -74,7 +74,7 @@ else {
 function udoRegister($location,$email,$password)
 { 
 //      return udoRegister($request['uaddress'],$request['uemail'],$request['upassword']);
-$connection=new mysqli("192.168.1.123", "myuser", "mypass", "test"); 
+$connection=new mysqli("192.168.1.130", "myuser", "mypass", "test"); 
 $query = "INSERT INTO users(location, email,userpass ) VALUES ('$location','$email','$password' )";
 //$query = "INSERT INTO users(email,userpass, location, lat, longit) VALUES ('akm@gmail.com','123','newark','123','345')";
 $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
@@ -85,7 +85,7 @@ else {
 }
 // Add queue by client
 function AddQueclient($queueid,$queueduration){
-  $connection=new mysqli("192.168.1.123", "myuser", $password, $database); 
+  $connection=new mysqli("192.168.1.130", "myuser", $password, $database); 
   $query = "INSERT INTO queue(queueid, queueduration, queuetime) VALUES ($queueid,$queueduration,now())";
   $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
   if ($result){ return 1 ; }
@@ -95,7 +95,7 @@ function AddQueclient($queueid,$queueduration){
   }
 // Remove queue by client
 function removeQueclient($queueid){
-  $connection=new mysqli("192.168.1.123", "myuser", $password, $database); 
+  $connection=new mysqli("192.168.1.130", "myuser", $password, $database); 
   $query = "DELETE FROM queue WHERE queueid = $queueid";
   $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
   if ($result){ return 1 ; }
@@ -104,7 +104,7 @@ function removeQueclient($queueid){
   }
   }
 function category(){
-$connection=new mysqli("192.168.1.123", "myuser", "mypass", "test"); 
+$connection=new mysqli("192.168.1.130", "myuser", "mypass", "test"); 
 $query = "select category from business";
 $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
 if ($result){ return 1 ;}

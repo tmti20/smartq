@@ -1,3 +1,4 @@
+
 <?php
 session_start();
 //$_SESSION["authenticated"] = False;
@@ -10,7 +11,7 @@ include ("DB/connectDB.php");
 //Get values form login_form.php file
 $username = $_GET['username'];
 $_SESSION["username"] = $username;
-echo $username;
+
 //$pass = filter_input(INPUT_POST, 'password' );
 //$_SESSION["password"] = $pass;
 
@@ -48,7 +49,6 @@ while ($r1 = mysqli_fetch_array($t1,MYSQLI_ASSOC)){
 $userid = $r1["userid"];
 }
 
-echo "$userid";
 
 //Active orders are here
 $s = "select * from queue where userid = '$userid' ";
@@ -70,12 +70,14 @@ else {$num = 1;
         $orderid = $r["queueid"];
         $storename = $r["storename"];
 	$location = $r["location"];
-        //$service = $r["servicename"];
-
+        $queueduration = $r["queueduration"];
+	$position = $r["queueposition"];
 //            printing active order here
         echo " <br>Order ID: $orderid<br>";
         echo " <br>Store Name: $storename<br>";
 	echo " <br>Location: $location<br><br>";
+	echo " <br>Position: $position<br><br>";
+	echo " <br>Serving Time: $queueduration Min<br><br>";
 
 
     }

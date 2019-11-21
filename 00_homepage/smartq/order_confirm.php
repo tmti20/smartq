@@ -15,11 +15,11 @@
     $username = $_SESSION["username"];
     $location = $_SESSION["location"];
     $store = $_SESSION["store"];
-    //$barber = $_SESSION["barber"];
     $service = $_SESSION["service"];
-    $queuenumber = "10"; // THIS IS JUST RANDOM NUMBER TO PRINT
+    $queueposition = $_SESSION["position"];
+    $queueduration = $_SESSION["queueduration"];
 
-//---------------------calculate wait time---------------------------------------
+/*/---------------------calculate wait time---------------------------------------
 if($service == 'Full Service Wash'){
 	$queueduration = '10';
 }elseif($service == 'Super Wash'){
@@ -30,7 +30,7 @@ if($service == 'Full Service Wash'){
 	$queueduration = '25';
 }elseif($service == 'All in One'){
 	$queueduration = '45';
-}	
+}*/	
 
 // ------------------------- getting user id-----------------------------------------
 $s1 = "select * from users where email = '$username'";
@@ -47,13 +47,27 @@ $r2 = mysqli_fetch_array($t2,MYSQLI_ASSOC);
 $merchantid = $r2['merchantid'];
     //echo "<br><h3> Storename: $store,  <br> Your userid : $merchantid </h3>";
 
+// ------------------------- getting service Time -----------------------------------------
+$s3 = "select * from service where servicename = '$service'";
+$t3 = mysqli_query( $db,  $s3 )  or die( mysqli_error($db) ); #executes the sql statement
+$r3 = mysqli_fetch_array($t3,MYSQLI_ASSOC);
+$servicetime = $r3['servicetime'];
+    echo "<br><h3> $servicetime </h3>";
+
+/*/ ------------------------- getting service Time -----------------------------------------
+$s3 = "select * from queue where merchantid = '$merchantid'";
+$t3 = mysqli_query( $db,  $s3 )  or die( mysqli_error($db) ); #executes the sql statement
+$r3 = mysqli_fetch_array($t3,MYSQLI_ASSOC);
+$num = mysqli_num_rows($t3);
+$servicetime = $r3['servicetime'];
+    echo "<br><h3> $servicetime </h3>"; */
 
 
 
 // ------------------------- data enter for queue table-----------------------------------------
-$s3 = "insert into queue (userid, merchantid,username,storename,queueduration,queuetime, location) values ('$userid','$merchantid','$username','$store','$queueduration', NOW(),'$location' )";
+$s3 = "insert into queue (userid, merchantid,username,storename,queueduration,queuetime, location,queueposition) values ('$userid','$merchantid','$username','$store','$queueduration', NOW(),'$location','$queueposition' )";
 $t3 = mysqli_query( $db,  $s3 )  or die( mysqli_error($db) ); #executes the sql statement
-    echo "<br><br><h3> Hey $username, Your Order is Confirm! <br> Your queue Positoin : $queuenumber </h3>";
+    echo "<br><br><h5> Hey $username, Your Order is Confirm! <br> Your queue Positoin : $queueposition </h5>"; 
 
 // ------------------------------------------------------------------
 $s4 = "select * from queue where userid = '$userid' and merchantid = '$merchantid' " ;
@@ -63,7 +77,7 @@ while ($r4 = mysqli_fetch_array($t4,MYSQLI_ASSOC)){
     $orderid = $r4['queueid'];
 }
 
-echo "<br><h3>Order ID: $orderid </h3>";
+echo "<br><h5>Order ID: $orderid </h5>";
 ?>
 <!--add order button here
     <div class="text-center p-t-90">
