@@ -23,8 +23,15 @@
 
 <!--            PRINT ORDER REVIEW-->
 <?php
-    include("DB/connectDB.php");
+    //include("DB/connectDB.php");
 	// ------------------------- Getting service Time -----------------------------------------
+	require_once('./client/path.inc');
+	require_once('./client/get_host_info.inc');
+	require_once('./client/rabbitMQLib.inc');
+
+	$client = new RabbitMQClient('testRabbitMQ.ini', 'testServer');
+	$req = array("type"=>"stime","location"=>$location);
+
 	$s = "select * from service where servicename = '$service'";
 	$t = mysqli_query( $db,  $s )  or die( mysqli_error($db) ); #executes the sql statement
 	$r = mysqli_fetch_array($t,MYSQLI_ASSOC);
