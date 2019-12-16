@@ -192,7 +192,7 @@ return $datas;
 }
 
 
-
+//------------------ services -----------------------------------
 function service(){
 $connection=mysqli_connect("192.168.1.121", "myuser", "mypass", "test");
 //------------------ Database Failover -----------------------------------
@@ -209,6 +209,42 @@ while ($r = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
         $datas[] = $r['servicename'];
     }
 return $datas;
+}
+
+
+
+
+function stime($service,$store,$location){
+$connection=mysqli_connect("192.168.1.121", "myuser", "mypass", "test");
+//------------------ Database Failover -----------------------------------
+if (mysqli_connect_errno()){
+	#echo "Master Database failed to connect to MySQL: " . mysqli_connect_error();
+	echo "Master Database failed to connect to MySQL \n" ;
+	echo "Connecting  to Slave \n\n";
+	$connection=mysqli_connect("192.168.1.120", "myuser", "mypass", "test");
+	 }
+//------------------ services Time -----------------------------------
+$query = "select * from service where servicename = '$service'";
+$result = mysqli_query($connection, $query) or die(mysqli_error($connection));
+$r = mysqli_fetch_array($result, MYSQLI_ASSOC);
+$servicetime = $r['servicetime'];
+//------------------ services position -----------------------------------
+$query = "select  *  from queue where storename = '$store' and location = '$location'";
+$result = mysqli_query($connection, $query) or die(mysqli_error($connection));
+$num = mysqli_num_rows($result);
+$position = $num +1;
+//------------------ services duration -----------------------------------
+$query = "select  max(queueduration)  from queue where storename = '$store' and location = '$location'";
+$result = mysqli_query($connection, $query) or die(mysqli_error($connection));
+$r = mysqli_fetch_array($result, MYSQLI_ASSOC);
+$queueduration = $r['max(queueduration)'];
+
+$datas = array();
+$datas[]= $servicetime;
+$datas[]= $position;
+$datas[]= $queueduration;
+return $datas;
+
 
 }
 
@@ -247,6 +283,14 @@ function requestProcessor($request)
       return store($request['location']);
       case "service":
       return service();
+      case "stime":
+      return stime($request['service'], $request['store'],$request['location']);
+
+
+
+
+
+
     }
   return array("returnCode" => '0', 'message'=>"Server received request and processed");
 }

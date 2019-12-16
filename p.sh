@@ -1,4 +1,5 @@
 #!/bin/bash
+clear
 echo pushing into git add commit
 read commit
 sudo git add .

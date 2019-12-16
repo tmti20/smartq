@@ -30,17 +30,21 @@
 	require_once('./client/rabbitMQLib.inc');
 
 	$client = new RabbitMQClient('testRabbitMQ.ini', 'testServer');
-	$req = array("type"=>"stime","location"=>$location);
+	$req = array("type"=>"stime","service"=>$service,"store"=>$store,"location"=>$location);
+	$datas = $client->send_request($req);
+	$servicetime = $datas[0];	
+	$position = $datas[1];
+	$queueduration = $datas[2];
+	$_SESSION["position"] = $position;
+	$_SESSION["queueduration"] = $queueduration;
 
-	$s = "select * from service where servicename = '$service'";
-	$t = mysqli_query( $db,  $s )  or die( mysqli_error($db) ); #executes the sql statement
-	$r = mysqli_fetch_array($t,MYSQLI_ASSOC);
-	$servicetime = $r['servicetime'];
-    	//$_SESSION["servicetime"] = $servicetime;
-	$queueduration = $servicetime;
-
-	// ------------------------- Queue Position  -----------------------------------------
-	$s3 = "select * from queue where storename = '$store' and location = '$location'";
+	/*/echo $servicetime;
+	print_r($datas);
+	// ------------------------- wait Time  -----------------------------------------
+	$client = new RabbitMQClient('testRabbitMQ.ini', 'testServer');
+	$req = array("type"=>"wtime","store"=>$store);
+	$servicetime = $client->send_request($req);
+	$s3 = "select  sum(queueduration)  from queue where storename = '$store' and location = '$location'";
 	$t3 = mysqli_query( $db,  $s3 )  or die( mysqli_error($db) ); #executes the sql statement
 	//$r3 = mysqli_fetch_array($t3,MYSQLI_ASSOC);
 	$num = mysqli_num_rows($t3);
@@ -49,7 +53,7 @@
 	while ($r3 = mysqli_fetch_array($t3,MYSQLI_ASSOC)){
 	    $queueduration = $r3['queueduration'] + $queueduration;
 	}
-	$_SESSION["queueduration"] = $queueduration;
+	$_SESSION["queueduration"] = $queueduration; */
 
     echo "<span class=\"login100-form-title p-b-34 p-t-27\">
         Client Email: <h5 > $username </h5><br>
@@ -58,7 +62,9 @@
         Service:<h5> $service </h5><br>
 	Service Time:<h5> $queueduration Min </h5><br>
 	Position:<h5> $position </h5><br>
-      </span> "
+      </span> ";
+	$queueduration = $servicetime + $queueduration;
+	$_SESSION["queueduration"] = $queueduration;
 ?>
 
 
