@@ -23,6 +23,30 @@ $location = $_SESSION["location"];
     </span>
 <!--         SERVICE MENU HERE-->
 <?php
+
+
+
+	require_once('./client/path.inc');
+	require_once('./client/get_host_info.inc');
+	require_once('./client/rabbitMQLib.inc');
+
+	$client = new RabbitMQClient('testRabbitMQ.ini', 'testServer');
+	$req = array("type"=>"service");
+	$datas = $client->send_request($req);
+	//print_r($datas);
+	echo "<select  name=\"service\">";
+	foreach ($datas as $data){
+	echo "<option value = \"$data\">";
+	echo " $data <br>";
+	echo "</option>";
+	echo "<br>";
+	}
+	echo "</select>";
+
+
+
+/*
+
 include("DB/connectDB.php");
 $s = "select * from service ";
 ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
@@ -39,7 +63,7 @@ while ($r = mysqli_fetch_array($t, MYSQLI_ASSOC)) {
     echo "<br>";
 }
 ////END THE MENU
-echo "</select>";
+echo "</select>"; */
 ?>
 <!--//NEXT BUTTON-->
     <div class="container-login100-form-btn">

@@ -208,7 +208,7 @@ function showHint(str) {
 <body>
 	<div class="limiter">
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-		<a class="navbar-brand" href="#">SmartQue</a>
+		<a class="navbar-brand" href="#">SmartQuee</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 		  <span class="navbar-toggler-icon"></span>
 		</button>
@@ -276,12 +276,13 @@ function showHint(str) {
 						<div class="wrap-login100">
   <div class="member">
 		<form class="login100-form validate-form" action="../01_php_scripts/RabbitMQClientSample.php">
-		<p>Address: <input id="Uaddress" type="text" name="address" class="search_addr form-control" size="45"></p>
-				<label for="ermail">Email address:</label>
-				<input id="uremail" type="text" name="email" class="form-control" id="email">
-				<div class="form-group">
-				<label  for="urpassword">Password:</label>
-				<input id="urpassword" type="text" name="password" class="form-control" id="pwd">
+			<label for="ermail">Email:</label>
+			<input id="uremail" type="text" name="email" class="form-control" id="email">
+			<div class="form-group">
+			<label  for="urpassword">Password:</label>
+			<input id="urpassword" type="text" name="password" class="form-control" id="pwd">
+			<label  for="address">City:</label> 
+			<input id="Uaddress" type="text" name="address" class="search_addr form-control" size="45"></p>
 		</div>
 		<input type="button" onclick="handleclick(this)" name="type" value="Register as User" class="btn btn-default"></input>
 		</form>	

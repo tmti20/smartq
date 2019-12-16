@@ -84,7 +84,7 @@ else {$num = 1;
 //        button for placing order
 	echo "  <br><br>
         	<div class=\"container-login100-form-btn\">
-            	<br><a class=\"login100-form-btn\" href=\"location.php\">PLACE ORDER</a><br><br>
+            	<br><a class=\"login100-form-btn\" href=\"location.php?type=location\">PLACE ORDER</a><br><br>
         	</div>";
     }
 //    logout button

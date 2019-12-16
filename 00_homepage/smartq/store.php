@@ -21,21 +21,25 @@ $_SESSION["location"] = $location;
     </span>
     <?php
 //STORE MENU
-    include("DB/connectDB.php");
-    $s = "select distinct storename from business where location = '$location'";
-    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
 
-    echo "<select  name=\"store\">";
-    while ($r = mysqli_fetch_array($t, MYSQLI_ASSOC)) {
-        $store = $r["storename"];
-        echo "<option value = \"$store\">";
-        echo "$store ";
-        echo "</option>";
-        echo "<br>";
-    }
+	require_once('./client/path.inc');
+	require_once('./client/get_host_info.inc');
+	require_once('./client/rabbitMQLib.inc');
 
-    //End STORE MENU
-    echo "</select>";
+	$client = new RabbitMQClient('testRabbitMQ.ini', 'testServer');
+	$req = array("type"=>"store","location"=>$location);
+	$datas = $client->send_request($req);
+	//print_r($datas);
+	echo "<select  name=\"store\">";
+	foreach ($datas as $data){
+	echo "<option value = \"$data\">";
+	echo " $data <br>";
+	echo "</option>";
+	echo "<br>";
+	}
+	echo "</select>";
+
+
     ?>
 <!--    NEXT BUTTON-->
     <div class="container-login100-form-btn">

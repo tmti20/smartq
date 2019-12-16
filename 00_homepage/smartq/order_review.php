@@ -12,7 +12,6 @@
     $username = $_SESSION["username"];
     $location = $_SESSION["location"];
     $store = $_SESSION["store"];
-    //$barber = $_SESSION["barber"];
     $service = $_POST["service"];
     $_SESSION["service"] = $service;
 	
@@ -33,7 +32,7 @@
     	//$_SESSION["servicetime"] = $servicetime;
 	$queueduration = $servicetime;
 
-	// ------------------------- Queue Position Time -----------------------------------------
+	// ------------------------- Queue Position  -----------------------------------------
 	$s3 = "select * from queue where storename = '$store' and location = '$location'";
 	$t3 = mysqli_query( $db,  $s3 )  or die( mysqli_error($db) ); #executes the sql statement
 	//$r3 = mysqli_fetch_array($t3,MYSQLI_ASSOC);

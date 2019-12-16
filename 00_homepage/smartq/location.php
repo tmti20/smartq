@@ -12,8 +12,8 @@
 <?php
 //$username = $_GET['username'];
 //$_SESSION["username"] = $username;
-$username = $_SESSION["username"];
-include "header.php";
+//$username = $_SESSION["username"];
+//include "header.php";
 //echo " $username";
 ?>
 
@@ -28,11 +28,34 @@ include "header.php";
     </span>
 
 <!--LOCATION MENU START HERE-->
-    <?php
-    include("DB/connectDB.php");
+<?php
+	$username = $_SESSION["username"];
+	include "header.php";
 
-    $s = "select distinct location from business ";
-    ($t = mysqli_query($db, $s)) or die(mysqli_error($db));
+	require_once('./client/path.inc');
+	require_once('./client/get_host_info.inc');
+	require_once('./client/rabbitMQLib.inc');
+
+	$type = $_GET['type'];
+
+	if($type=="location"){
+	$client = new RabbitMQClient('testRabbitMQ.ini', 'testServer');
+	$req = array("type"=>$type,"username"=>$username);
+	$datas = $client->send_request($req);
+	//print_r($datas);
+	echo "<select  name=\"location\">";
+	foreach ($datas as $data){
+	echo "<option value = \"$data\">";
+	echo " $data <br>";
+	echo "</option>";
+	echo "<br>";
+	}
+	echo "</select>";
+}
+    /*/include("DB/connectDB.php");
+
+   	$s = "select distinct location from business ";
+    	($t = mysqli_query($db, $s)) or die(mysqli_error($db));
 
     //MENU
     echo "<select  name=\"location\">";
@@ -46,7 +69,7 @@ include "header.php";
         echo "<br>";
     }
     echo "</select>";
-//    LOCATION MENU END HERE
+//    LOCATION MENU END HERE */
     ?>
 
 <!--NEXT BUTTON TO GO TO STORE.PHP FILE-->
