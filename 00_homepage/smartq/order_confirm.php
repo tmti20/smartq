@@ -11,15 +11,35 @@
     </span>
 
 <?php
-    include("DB/connectDB.php");
+    //include("DB/connectDB.php");
     $username = $_SESSION["username"];
     $location = $_SESSION["location"];
     $store = $_SESSION["store"];
     $service = $_SESSION["service"];
     $queueposition = $_SESSION["position"];
     $queueduration = $_SESSION["queueduration"];
+	require_once('./client/path.inc');
+	require_once('./client/get_host_info.inc');
+	require_once('./client/rabbitMQLib.inc');
 
-/*/---------------------calculate wait time---------------------------------------
+	$client = new RabbitMQClient('testRabbitMQ.ini', 'testServer');
+	$req = array("type"=>"corder","username"=>$username, "storename"=>$store,"queueduration"=>$queueduration,"location"=>$location,"queueposition"=>$queueposition);
+	$datas = $client->send_request($req);
+	$username = $datas[0];
+	$orderid = $datas[1];
+	$queueposition = $datas[2];
+	$waittime = $datas[3];
+	echo "<br><br><h5> Hey $username, Your Order is Confirm! <br> 
+	Queue Positoin : $queueposition<br>
+	Order ID: $orderid <br> 
+	Estimated Wait Time: $waittime</h5>";
+/*/ ------------------------- data enter for queue table-----------------------------------------
+$s3 = "insert into queue (username,storename,queueduration,queuetime, location,queueposition) values ('$username','$store','$queueduration', NOW(),'$location','$queueposition' )";
+$t3 = mysqli_query( $db,  $s3 )  or die( mysqli_error($db) ); #executes the sql statement
+    echo "<br><br><h5> Hey $username, Your Order is Confirm! <br> Your queue Positoin : $queueposition </h5>"; 
+
+
+//---------------------calculate wait time---------------------------------------
 if($service == 'Full Service Wash'){
 	$queueduration = '10';
 }elseif($service == 'Super Wash'){
@@ -30,7 +50,7 @@ if($service == 'Full Service Wash'){
 	$queueduration = '25';
 }elseif($service == 'All in One'){
 	$queueduration = '45';
-}*/	
+}	
 
 // ------------------------- getting user id-----------------------------------------
 $s1 = "select * from users where email = '$username'";
@@ -54,20 +74,17 @@ $r3 = mysqli_fetch_array($t3,MYSQLI_ASSOC);
 $servicetime = $r3['servicetime'];
     echo "<br><h3> $servicetime </h3>";
 
-/*/ ------------------------- getting service Time -----------------------------------------
+// ------------------------- getting service Time -----------------------------------------
 $s3 = "select * from queue where merchantid = '$merchantid'";
 $t3 = mysqli_query( $db,  $s3 )  or die( mysqli_error($db) ); #executes the sql statement
 $r3 = mysqli_fetch_array($t3,MYSQLI_ASSOC);
 $num = mysqli_num_rows($t3);
 $servicetime = $r3['servicetime'];
-    echo "<br><h3> $servicetime </h3>"; */
+    echo "<br><h3> $servicetime </h3>"; 
 
 
 
-// ------------------------- data enter for queue table-----------------------------------------
-$s3 = "insert into queue (userid, merchantid,username,storename,queueduration,queuetime, location,queueposition) values ('$userid','$merchantid','$username','$store','$queueduration', NOW(),'$location','$queueposition' )";
-$t3 = mysqli_query( $db,  $s3 )  or die( mysqli_error($db) ); #executes the sql statement
-    echo "<br><br><h5> Hey $username, Your Order is Confirm! <br> Your queue Positoin : $queueposition </h5>"; 
+
 
 // ------------------------------------------------------------------
 $s4 = "select * from queue where userid = '$userid' and merchantid = '$merchantid' " ;
@@ -77,15 +94,9 @@ while ($r4 = mysqli_fetch_array($t4,MYSQLI_ASSOC)){
     $orderid = $r4['queueid'];
 }
 
-echo "<br><h5>Order ID: $orderid </h5>";
+echo "<br><h5>Order ID: $orderid </h5>"; */
 ?>
-<!--add order button here
-    <div class="text-center p-t-90">
-        <a class="login100-form-btn" methode= "get" href="location.php?username =<?php echo $email ?> " >
-            ADD Order
-        </a>
-    </div>   
--->
+
 <!--LOGOUT BUTTON HERE-->
     <div class="text-center p-t-90">
         <a class="login100-form-btn" href="logout.php">

@@ -1,7 +1,8 @@
 <?php
 session_start();
 //$_SESSION["authenticated"] = False;
-
+$masterip = "192.168.1.121";
+$slaveip = "192.168.1.120";
 require_once('path.inc');
 require_once('get_host_info.inc');
 require_once('rabbitMQLib.inc');
@@ -212,8 +213,6 @@ return $datas;
 }
 
 
-
-
 function stime($service,$store,$location){
 $connection=mysqli_connect("192.168.1.121", "myuser", "mypass", "test");
 //------------------ Database Failover -----------------------------------
@@ -245,9 +244,38 @@ $datas[]= $position;
 $datas[]= $queueduration;
 return $datas;
 
-
 }
 
+
+//------------------ Confirm Order -----------------------------------
+function corder($username,$storename,$queueduration,$queuetime, $location,$queueposition){
+$connection=mysqli_connect("192.168.1.121", "myuser", "mypass", "test");
+//------------------ Database Failover -----------------------------------
+if (mysqli_connect_errno()){
+	#echo "Master Database failed to connect to MySQL: " . mysqli_connect_error();
+	echo "Master Database failed to connect to MySQL \n" ;
+	echo "Connecting  to Slave \n\n";
+	$connection=mysqli_connect("192.168.1.120", "myuser", "mypass", "test");
+	 }
+//------------------ Insert Order Deatails  -----------------------------------
+$query = "insert into queue (username,storename,queueduration,queuetime, location,queueposition) values ('$username','$storename','$queueduration', NOW(),'$location','$queueposition' )";
+$result = mysqli_query($connection, $query) or die(mysqli_error($connection));
+//------------------ Get Order id and position -----------------------------------
+$query = "select * from queue where storename = '$storename' and location = '$location' order by queuetime DESC limit 1";
+$result = mysqli_query($connection, $query) or die(mysqli_error($connection));
+$r = mysqli_fetch_array($result, MYSQLI_ASSOC);
+$username = $r['username'];
+$queueid = $r['queueid'];
+$queueposition = $r['queueposition'];
+$waittime = $r['queueduration'];
+
+$datas =array();
+$datas[]= $username;
+$datas[]= $queueid;
+$datas[]= $queueposition;
+$datas[]= $waittime;
+return $datas;
+}
 
 function requestProcessor($request)
 {
@@ -259,17 +287,17 @@ function requestProcessor($request)
   }
   switch ($request['type'])
   {
-    case "Qremove_client":
-    return removeQueclient($request['queueid']);
-    case "Qadd_client":
-    return AddQueclient($request['queueid'],$request['queueduration']);
-    case "Ulogin":
+      case "Qremove_client":
+      return removeQueclient($request['queueid']);
+      case "Qadd_client":
+      return AddQueclient($request['queueid'],$request['queueduration']);
+      case "Ulogin":
       return udoLogin($request['uemail'],$request['upassword']);
-    case "cLogin":
-    return cdoLogin($request['cemail'],$request['cpassword']);
-    case "validate_session":
+      case "cLogin":
+      return cdoLogin($request['cemail'],$request['cpassword']);
+      case "validate_session":
       return doValidate($request['sessionId']);
-    case "cregistration":
+      case "cregistration":
       return cdoRegister($request['caddress'],$request['cstore'],$request['cemail'],$request['ccategory'],$request['cpassword']);
       case "uregistration":
       return udoRegister($request['uaddress'],$request['uemail'],$request['upassword']);
@@ -285,10 +313,8 @@ function requestProcessor($request)
       return service();
       case "stime":
       return stime($request['service'], $request['store'],$request['location']);
-
-
-
-
+      case "corder":
+      return corder($request['username'], $request['storename'],$request['queueduration'] ,$request['location'],$request['queueposition']);
 
 
     }

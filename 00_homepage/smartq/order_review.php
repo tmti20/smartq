@@ -36,7 +36,6 @@
 	$position = $datas[1];
 	$queueduration = $datas[2];
 	$_SESSION["position"] = $position;
-	$_SESSION["queueduration"] = $queueduration;
 
 	/*/echo $servicetime;
 	print_r($datas);
