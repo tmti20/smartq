@@ -9,7 +9,9 @@ require_once('rabbitMQLib.inc');
 //$connection=new mysqli($hostname, $username, $mypassword, $database);
 
 function mysort($email,$password){
-  $connection=new mysqli("192.168.1.121", "myuser", "mypass", "test");
+$masterip = "192.168.1.121";
+$slaveip = "192.168.1.120";
+  $connection=new mysqli("$masterip", "myuser", "mypass", "test");
   $query = "select * from users where email='$email'";
   $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
   while($row = $result->fetch_array())
@@ -21,15 +23,17 @@ function mysort($email,$password){
 
 //------------------ User Login -----------------------------------
 function udoLogin($uemail,$upassword){
+$masterip = "192.168.1.121";
+$slaveip = "192.168.1.120";
 #$connection=new mysqli("192.168.1.121", "myuser", "mypass", "test");
-$connection=mysqli_connect("192.168.1.121", "myuser", "mypass", "test");
+$connection=mysqli_connect("$masterip", "myuser", "mypass", "test");
 //------------------ Database Failover -----------------------------------
 // if the first connection fails in master db then it will go to the if statement and check connection for slave db.
 if (mysqli_connect_errno()){
 	#echo "Master Database failed to connect to MySQL: " . mysqli_connect_error();
 	echo "Master Database failed to connect to MySQL \n" ;
 	echo "Connecting  to Slave \n\n";
-	$connection=mysqli_connect("192.168.1.120", "myuser", "mypass", "test");
+	$connection=mysqli_connect("$slaveip", "myuser", "mypass", "test");
 	 }
 
 $query = "select * from users where email='$uemail' and userpass='$upassword' ";
@@ -53,13 +57,15 @@ return 0 ;
 //--------------Client Login-------------------------------------
 function cdoLogin($email,$password)
 {
-$connection=mysqli_connect("192.168.1.121", "myuser", "mypass", "test");
+$masterip = "192.168.1.121";
+$slaveip = "192.168.1.120";
+$connection=mysqli_connect("$masterip", "myuser", "mypass", "test");
 //------------------ Database Failover -----------------------------------
 if (mysqli_connect_errno()){
 	#echo "Master Database failed to connect to MySQL: " . mysqli_connect_error();
 	echo "Master Database failed to connect to MySQL \n" ;
 	echo "Connecting  to Slave \n\n";
-	$connection=mysqli_connect("192.168.1.120", "myuser", "mypass", "test");
+	$connection=mysqli_connect("$slaveip", "myuser", "mypass", "test");
 	 }
 $query = "select * from business where email='$email' and merchantpass ='$password' ";
 $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
@@ -83,13 +89,15 @@ return 0 ;
 //--------------------Register Marchant------------------------
 function cdoRegister($caddress,$cstore,$email,$category,$password)
 { 
-$connection=mysqli_connect("192.168.1.121", "myuser", "mypass", "test");
+$masterip = "192.168.1.121";
+$slaveip = "192.168.1.120";
+$connection=mysqli_connect("$masterip", "myuser", "mypass", "test");
 //------------------ Database Failover -----------------------------------
 if (mysqli_connect_errno()){
 	#echo "Master Database failed to connect to MySQL: " . mysqli_connect_error();
 	echo "Master Database failed to connect to MySQL \n" ;
 	echo "Connecting  to Slave \n\n";
-	$connection=mysqli_connect("192.168.1.120", "myuser", "mypass", "test");
+	$connection=mysqli_connect("$slaveip", "myuser", "mypass", "test");
 	 }
 $query = "INSERT INTO business(location,storename,email,category,merchantpass,timestamp) VALUES ('$caddress','$cstore','$email','$category','$password',now())";
 $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
@@ -103,13 +111,15 @@ else {
 //-------------------------------Registers users----------------------------
 function udoRegister($location,$email,$password)
 { 
-$connection=mysqli_connect("192.168.1.121", "myuser", "mypass", "test");
+$masterip = "192.168.1.121";
+$slaveip = "192.168.1.120";
+$connection=mysqli_connect("$masterip", "myuser", "mypass", "test");
 //------------------ Database Failover -----------------------------------
 if (mysqli_connect_errno()){
 	#echo "Master Database failed to connect to MySQL: " . mysqli_connect_error();
 	echo "Master Database failed to connect to MySQL \n" ;
 	echo "Connecting  to Slave \n\n";
-	$connection=mysqli_connect("192.168.1.120", "myuser", "mypass", "test");
+	$connection=mysqli_connect("$slaveip", "myuser", "mypass", "test");
 	 }
 $query = "INSERT INTO users(location, email,userpass ) VALUES ('$location','$email','$password' )";
 //$query = "INSERT INTO users(email,userpass, location, lat, longit) VALUES ('akm@gmail.com','123','newark','123','345')";
@@ -123,7 +133,9 @@ else {
 
 // Add queue by client
 function AddQueclient($queueid,$queueduration){
-  $connection=new mysqli("192.168.1.121", "myuser", $password, $database); 
+$masterip = "192.168.1.121";
+$slaveip = "192.168.1.120";
+  $connection=new mysqli("$masterip", "myuser", $password, $database); 
   $query = "INSERT INTO queue(queueid, queueduration, queuetime) VALUES ($queueid,$queueduration,now())";
   $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
   if ($result){ return 1 ; }
@@ -135,7 +147,9 @@ function AddQueclient($queueid,$queueduration){
 
 // Remove queue by client
 function removeQueclient($queueid){
-  $connection=new mysqli("192.168.1.121", "myuser", $password, $database); 
+$masterip = "192.168.1.121";
+$slaveip = "192.168.1.120";
+  $connection=new mysqli("$masterip", "myuser", $password, $database); 
   $query = "DELETE FROM queue WHERE queueid = $queueid";
   $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
   if ($result){ return 1 ; }
@@ -144,7 +158,9 @@ function removeQueclient($queueid){
   }
   }
 function category(){
-$connection=new mysqli("192.168.1.121", "myuser", "mypass", "test"); 
+$masterip = "192.168.1.121";
+$slaveip = "192.168.1.120";
+$connection=new mysqli("$masterip", "myuser", "mypass", "test"); 
 $query = "select category from business";
 $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
 if ($result){ return 1 ;}
@@ -154,13 +170,15 @@ else {
 }
 
 function location($username){
-$connection=mysqli_connect("192.168.1.121", "myuser", "mypass", "test");
+$masterip = "192.168.1.121";
+$slaveip = "192.168.1.120";
+$connection=mysqli_connect("$masterip", "myuser", "mypass", "test");
 //------------------ Database Failover -----------------------------------
 if (mysqli_connect_errno()){
 	#echo "Master Database failed to connect to MySQL: " . mysqli_connect_error();
 	echo "Master Database failed to connect to MySQL \n" ;
 	echo "Connecting  to Slave \n\n";
-	$connection=mysqli_connect("192.168.1.120", "myuser", "mypass", "test");
+	$connection=mysqli_connect("$slaveip", "myuser", "mypass", "test");
 	 }
 $query ="select distinct location from business ";
 $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
@@ -174,13 +192,15 @@ return $datas;
 
 
 function store($location){
-$connection=mysqli_connect("192.168.1.121", "myuser", "mypass", "test");
+$masterip = "192.168.1.121";
+$slaveip = "192.168.1.120";
+$connection=mysqli_connect("$masterip", "myuser", "mypass", "test");
 //------------------ Database Failover -----------------------------------
 if (mysqli_connect_errno()){
 	#echo "Master Database failed to connect to MySQL: " . mysqli_connect_error();
 	echo "Master Database failed to connect to MySQL \n" ;
 	echo "Connecting  to Slave \n\n";
-	$connection=mysqli_connect("192.168.1.120", "myuser", "mypass", "test");
+	$connection=mysqli_connect("$slaveip", "myuser", "mypass", "test");
 	 }
 $query =  "select distinct storename from business where location = '$location'";
 $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
@@ -195,13 +215,15 @@ return $datas;
 
 //------------------ services -----------------------------------
 function service(){
-$connection=mysqli_connect("192.168.1.121", "myuser", "mypass", "test");
+$masterip = "192.168.1.121";
+$slaveip = "192.168.1.120";
+$connection=mysqli_connect("$masterip", "myuser", "mypass", "test");
 //------------------ Database Failover -----------------------------------
 if (mysqli_connect_errno()){
 	#echo "Master Database failed to connect to MySQL: " . mysqli_connect_error();
 	echo "Master Database failed to connect to MySQL \n" ;
 	echo "Connecting  to Slave \n\n";
-	$connection=mysqli_connect("192.168.1.120", "myuser", "mypass", "test");
+	$connection=mysqli_connect("$slaveip", "myuser", "mypass", "test");
 	 }
 $query = "select * from service ";
 $result = mysqli_query($connection, $query) or die(mysqli_error($connection));
@@ -214,13 +236,15 @@ return $datas;
 
 
 function stime($service,$store,$location){
-$connection=mysqli_connect("192.168.1.121", "myuser", "mypass", "test");
+$masterip = "192.168.1.121";
+$slaveip = "192.168.1.120";
+$connection=mysqli_connect("$masterip", "myuser", "mypass", "test");
 //------------------ Database Failover -----------------------------------
 if (mysqli_connect_errno()){
 	#echo "Master Database failed to connect to MySQL: " . mysqli_connect_error();
 	echo "Master Database failed to connect to MySQL \n" ;
 	echo "Connecting  to Slave \n\n";
-	$connection=mysqli_connect("192.168.1.120", "myuser", "mypass", "test");
+	$connection=mysqli_connect("$slaveip", "myuser", "mypass", "test");
 	 }
 //------------------ services Time -----------------------------------
 $query = "select * from service where servicename = '$service'";
@@ -248,14 +272,16 @@ return $datas;
 
 
 //------------------ Confirm Order -----------------------------------
-function corder($username,$storename,$queueduration,$queuetime, $location,$queueposition){
-$connection=mysqli_connect("192.168.1.121", "myuser", "mypass", "test");
+function corder($username,$storename,$queueduration, $location,$queueposition){
+$masterip = "192.168.1.121";
+$slaveip = "192.168.1.120";
+$connection=mysqli_connect("$masterip", "myuser", "mypass", "test");
 //------------------ Database Failover -----------------------------------
 if (mysqli_connect_errno()){
 	#echo "Master Database failed to connect to MySQL: " . mysqli_connect_error();
 	echo "Master Database failed to connect to MySQL \n" ;
 	echo "Connecting  to Slave \n\n";
-	$connection=mysqli_connect("192.168.1.120", "myuser", "mypass", "test");
+	$connection=mysqli_connect("$slaveip", "myuser", "mypass", "test");
 	 }
 //------------------ Insert Order Deatails  -----------------------------------
 $query = "insert into queue (username,storename,queueduration,queuetime, location,queueposition) values ('$username','$storename','$queueduration', NOW(),'$location','$queueposition' )";
@@ -276,6 +302,37 @@ $datas[]= $queueposition;
 $datas[]= $waittime;
 return $datas;
 }
+
+
+//------------------ Home page info -----------------------------------
+function home($username){
+$masterip = "192.168.1.121";
+$slaveip = "192.168.1.120";
+$connection=mysqli_connect("$masterip", "myuser", "mypass", "test");
+//------------------ Database Failover -----------------------------------
+if (mysqli_connect_errno()){
+	#echo "Master Database failed to connect to MySQL: " . mysqli_connect_error();
+	echo "Master Database failed to connect to MySQL \n" ;
+	echo "Connecting  to Slave \n\n";
+	$connection=mysqli_connect("$slaveip", "myuser", "mypass", "test");
+	 }
+$query = "select * from queue where username = '$username'";
+$result = mysqli_query($connection, $query) or die(mysqli_error($connection));
+$num = mysqli_num_rows($result); 
+
+$datas =array();
+while ($r = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+        $datas[] = $r['queueid'];
+        $datas[] = $r['storename'];
+        $datas[] = $r['location'];
+        $datas[] = $r['queueduration'];
+	$datas[] = $r['queueposition'];
+    }
+$datas[] = $num;
+return $datas;
+}
+
+//=================== RMQ Processor ============================================
 
 function requestProcessor($request)
 {
@@ -315,7 +372,8 @@ function requestProcessor($request)
       return stime($request['service'], $request['store'],$request['location']);
       case "corder":
       return corder($request['username'], $request['storename'],$request['queueduration'] ,$request['location'],$request['queueposition']);
-
+      case "home":
+      return home($request['username']);
 
     }
   return array("returnCode" => '0', 'message'=>"Server received request and processed");
