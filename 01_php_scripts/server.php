@@ -366,6 +366,55 @@ return $datas;
 }
 
 
+//------------------ Store queue Delete -----------------------------------
+function qdelete($queueid){
+$masterip = "192.168.1.121";
+$slaveip = "192.168.1.120";
+$connection=mysqli_connect("$masterip", "myuser", "mypass", "test");
+//------------------ Database Failover -----------------------------------
+if (mysqli_connect_errno()){
+	#echo "Master Database failed to connect to MySQL: " . mysqli_connect_error();
+	echo "Master Database failed to connect to MySQL \n" ;
+	echo "Connecting  to Slave \n\n";
+	$connection=mysqli_connect("$slaveip", "myuser", "mypass", "test");
+	 }
+//------------------ Store name and qposition -----------------------------------
+$query = "select * from queue where queueid = '$queueid'";
+$result = mysqli_query($connection, $query) or die(mysqli_error($connection));
+$num = mysqli_num_rows($result); 
+$datas =array();
+while ($r = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+        //$datas[] = $r['queueid'];
+        $storename = $r['storename'];
+        $useremail = $r['username'];
+	$queueposition = $r['queueposition'];
+        $location = $r['location'];
+    }
+//------------------Delete queue -----------------------------------
+$query = "DELETE FROM queue WHERE queueid = '$queueid'";
+$result = mysqli_query($connection, $query) or die(mysqli_error($connection));
+
+//------------------ update queue position -----------------------------------
+$query = "update queue set queueposition = queueposition - 1 where storename = '$storename' and queueposition > $queueposition;";
+$result = mysqli_query($connection, $query) or die(mysqli_error($connection));
+
+if ($queueposition == 1){
+$headers[] = 'Content-type: text/html; charset=iso-8859-1'; // Header for plain text to email
+$to = "ti36@njit.edu";
+$subject = " we will server you Next - SmartQ " ;
+$message = "Hurry up ! We will serve you Next. Only One customer ahead of you. 
+<br><b> Store:</b> $storename
+<br> <b>Store Location :</b> $location 
+<br><b> Thanks for Using SmartQ App</b>";
+mail($to, $subject, $message,implode("\r\n", $headers)); // send mailer function
+echo "<br> Email Sent to Next client";
+}
+
+}
+
+
+
+
 //=================== RMQ Processor ============================================
 
 function requestProcessor($request)
@@ -410,6 +459,8 @@ function requestProcessor($request)
       return home($request['username']);
       case "squeue":
       return squeue($request['email']);
+      case "qdelete":
+      return qdelete($request['queueid']);
     }
   return array("returnCode" => '0', 'message'=>"Server received request and processed");
 }

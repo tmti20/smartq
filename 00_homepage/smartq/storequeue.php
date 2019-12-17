@@ -3,7 +3,6 @@ h5 {
   border-style: double;
 }
 
-
 </style>
 <?php
 session_start();
@@ -16,9 +15,10 @@ $req = array("type"=>"squeue","email"=>$username);
 $datas = $client->send_request($req);
 $num = count($datas);
 $count=1;
-foreach($datas as $value){
-  if (($count % 5)== 1) {
+foreach($datas as $value){ //echo "<h5>";
+  if (($count % 5)== 1) { echo "<br><h5></h5>";
   echo "Order ID: $value<br>";
+echo " <a class=\"text-center p-t-90\" href=\"../deletequeuestore.php?queueid=$value\">DELETE</a><br></h5>";
   }
   elseif (($count % 5) == 2) {
   echo "Customer Name: $value<br>";
@@ -31,7 +31,7 @@ foreach($datas as $value){
   }  
   else{
   echo "Serving Time: $value<br>";
-echo " <a class=\"text-center p-t-90\" href=\"../deletequeuestore.php?queueid= $orderid\">DELETE</a><br></h5>";
+
   }  
 
   $count=$count+1; }
