@@ -325,12 +325,46 @@ while ($r = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
         $datas[] = $r['queueid'];
         $datas[] = $r['storename'];
         $datas[] = $r['location'];
-        $datas[] = $r['queueduration'];
 	$datas[] = $r['queueposition'];
+        $datas[] = $r['queueduration'];
     }
-$datas[] = $num;
 return $datas;
 }
+
+
+//------------------ Store queue info -----------------------------------
+function squeue($email){
+$masterip = "192.168.1.121";
+$slaveip = "192.168.1.120";
+$connection=mysqli_connect("$masterip", "myuser", "mypass", "test");
+//------------------ Database Failover -----------------------------------
+if (mysqli_connect_errno()){
+	#echo "Master Database failed to connect to MySQL: " . mysqli_connect_error();
+	echo "Master Database failed to connect to MySQL \n" ;
+	echo "Connecting  to Slave \n\n";
+	$connection=mysqli_connect("$slaveip", "myuser", "mypass", "test");
+	 }
+
+$query = "select * from business where email = '$email'";
+$result = mysqli_query($connection, $query) or die(mysqli_error($connection)); 
+$r = mysqli_fetch_array($result, MYSQLI_ASSOC);
+$storename = $r['storename'];
+
+
+$query = "select * from queue where storename = '$storename'";
+$result = mysqli_query($connection, $query) or die(mysqli_error($connection));
+$num = mysqli_num_rows($result); 
+$datas =array();
+while ($r = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+        $datas[] = $r['queueid'];
+        $datas[] = $r['username'];
+        $datas[] = $r['location'];
+	$datas[] = $r['queueposition'];
+        $datas[] = $r['queueduration'];
+    }
+return $datas;
+}
+
 
 //=================== RMQ Processor ============================================
 
@@ -374,7 +408,8 @@ function requestProcessor($request)
       return corder($request['username'], $request['storename'],$request['queueduration'] ,$request['location'],$request['queueposition']);
       case "home":
       return home($request['username']);
-
+      case "squeue":
+      return squeue($request['email']);
     }
   return array("returnCode" => '0', 'message'=>"Server received request and processed");
 }
